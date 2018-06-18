@@ -1,0 +1,276 @@
+﻿
+@{
+    ViewBag.Title = "ExecutionData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lastUpdated = ViewBag.LastUpdated;
+}
+
+
+<div class="content">
+    <div class="content animate-panel">
+        <span class="pull-right">
+            Last Updated On: @lastUpdated
+        </span>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hpanel hgreen">
+                    <div class="panel-heading">
+                        Execution Raw Data
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display table table-bordered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>WeekStartDate</th>
+                                        <th>WeekEndDate</th>
+                                        <th>CalenderWeek</th>
+                                        <th>Project</th>
+                                        <th>Application</th>
+
+                                        <th>TotalFirstTimeTestInstances</th>
+                                        <th>TotalFirstTimePassed</th>
+                                        <th>TotalFirstTimeFailed</th>
+
+                                        <th>TotalInstances</th>
+                                        <th>TotalPassedInstances</th>
+                                        <th>TotalFailedInstances</th>
+
+                                        <th>TotalReTestInstances</th>
+                                        <th>ReTestPassedInstances</th>
+                                        <th>ReTestFailedInstances</th>
+
+
+                                        <th>PercentFirstTimeInstancesPassed</th>
+                                        <th>PercentFirstTimeInstancesFailed</th>
+
+                                        <th>PercentageTotalInstancesPassed</th>
+                                        <th>PercentageTotalInstancesFailed</th>
+
+                                        <th>PercentageReTestInstancesPassed</th>
+                                        <th>PercentageReTestInstancesFailed</th>
+
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>WeekStartDate</th>
+                                        <th>WeekEndDate</th>
+                                        <th>CalenderWeek</th>
+                                        <th>Project</th>
+                                        <th>Application</th>
+
+                                        <th>TotalFirstTimeTestInstances</th>
+                                        <th>TotalFirstTimePassed</th>
+                                        <th>TotalFirstTimeFailed</th>
+
+                                        <th>TotalInstances</th>
+                                        <th>TotalPassedInstances</th>
+                                        <th>TotalFailedInstances</th>
+
+                                        <th>TotalReTestInstances</th>
+                                        <th>ReTestPassedInstances</th>
+                                        <th>ReTestFailedInstances</th>
+
+
+                                        <th>PercentFirstTimeInstancesPassed</th>
+                                        <th>PercentFirstTimeInstancesFailed</th>
+
+                                        <th>PercentageTotalInstancesPassed</th>
+                                        <th>PercentageTotalInstancesFailed</th>
+
+                                        <th>PercentageReTestInstancesPassed</th>
+                                        <th>PercentageReTestInstancesFailed</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="hpanel panel-group">
+                
+                <div class="panel-body">
+                    <div class="text-center text-muted font-bold">Execution Data Details</div>
+
+                </div>
+
+                <div id="notes" class="collapse">
+
+                    <div class="panel-body note-link">
+                        <a href="#note1" data-toggle="tab">                            
+                            <h5>First Time Pass Fail Percentage</h5>
+                        </a>
+                    </div>
+
+                    <div class="panel-body note-link">
+                        <a href="#note2" data-toggle="tab">
+                            <h5>
+                                Total Pass Fail Percentage
+                            </h5>
+                        </a>
+                    </div>
+
+                    <div class="panel-body note-link">
+                        <a href="#note3" data-toggle="tab">
+                            <h5>
+                                Re-Run Pass Fail Percentage
+                            </h5>
+                        </a>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="hpanel">
+
+                <div class="panel-body">
+
+                    <div class="tab-content">
+                        <div id="note1" class="tab-pane active">
+                            <h3>First Time Pass Fail Percentage</h3>
+                            <hr />
+                            <div class="note-content">
+                                <span>
+                                    Total First Time execution test instances: If a test instance is executed for the first time in the given time period, (in this case weekly)
+                                    and ended with status Passed or Failed then it is considered for this metric.
+                                    <br/>
+                                    Passed and Failed counts are derived from the total executions with-in the time period based on the status of the test instance 
+                                    first execution.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div id="note2" class="tab-pane">
+                            <h3>Total Pass Fail Percentage </h3>
+                            <hr />
+                            <div class="note-content">
+                                <span>
+                                    Total Test Instance execution: If a test instance happens to be executed in the given time period, (in this case weekly) then it is considered
+                                    towards total test instance executed count.
+                                    <br/>
+                                    Each test instance status is derived based on the latest execution status of that instance in the given period.
+                                    <br/>
+                                    If a test instance is executed 5 times within a time period and having different status in each run, the 5th run status is considered.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div id="note3" class="tab-pane">
+                            <h3>Re-Run Pass Faill Percentage </h3>
+                            <hr />
+                            <div class="note-content">
+                                <span>
+                                    Re-Run Test Instances execution: If a test instance has a corresponding run in a given time period with status Passed or Failed which is not a
+                                    first, run for that test instance, it is considered as a re-run test instance.
+                                    <br/>
+                                    Test instance having multiple runs within the same period of the even it has first run in same period is considered as a re-run count.
+                                </span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+    @Scripts.Render("~/bundles/datatablesPlugins/js")
+
+    <script>
+        $(document).ready(function () {
+                var dtTable = $('#example').dataTable({
+                    "ajax": {
+                        "url": "/Dashboard/LoadExecutionWeekly",
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    buttons: [
+                        { extend: 'copy', className: 'btn-sm' },
+                        { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                        { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                        { extend: 'print', className: 'btn-sm' }
+                    ],
+                    "pageLength": 10,
+                    "columns": [
+                        { "data": "WeekStartDate", "autoWidth": true },
+                        { "data": "WeekEndDate", "autoWidth": true }, 
+                        { "data": "CalenderWeek", "autoWidth": true },
+                        { "data": "Project", "autoWidth": true },
+                        { "data": "Application", "autoWidth": true },
+
+                        { "data": "TotalFirstTimeTestInstances", "autoWidth": true },
+                        { "data": "TotalFirstTimePassed", "autoWidth": true },
+                        { "data": "TotalFirstTimeFailed", "autoWidth": true },
+
+                        { "data": "TotalInstances", "autoWidth": true },
+                        { "data": "TotalPassedInstances", "autoWidth": true },
+                        { "data": "TotalFailedInstances", "autoWidth": true },
+
+
+                        { "data": "TotalReTestInstances", "autoWidth": true },
+                        { "data": "ReTestPassedInstances", "autoWidth": true },
+                        { "data": "ReTestFailedInstances", "autoWidth": true },
+
+
+                        { "data": "PercentFirstTimeInstancesPassed", "autoWidth": true },
+                        { "data": "PercentFirstTimeInstancesFailed", "autoWidth": true },
+
+
+                        { "data": "PercentageTotalInstancesPassed", "autoWidth": true },
+                        { "data": "PercentageTotalInstancesFailed", "autoWidth": true },
+
+                        { "data": "PercentageReTestInstancesPassed", "autoWidth": true },
+                        { "data": "PercentageReTestInstancesFailed", "autoWidth": true }
+                    ],
+                    initComplete: function () {
+                        this.api().columns().every(function () {
+                            var column = this;
+                            if (column.header().innerText !== 'Edit Data' && column.header().innerText !== 'Data') {
+                                var select = $('<select><option value=""></option></select>')
+                                    .appendTo($(column.footer()).empty())
+                                    .on('change', function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                        );
+
+                                        column
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                    });
+
+                                column.data().unique().sort().each(function (d, j) {
+                                    select.append('<option value="' + d + '">' + d + '</option>')
+                                });
+                            }
+                        });
+                    }
+            });
+            });
+    </script>
+}
+

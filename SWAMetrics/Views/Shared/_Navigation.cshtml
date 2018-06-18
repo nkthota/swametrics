@@ -1,0 +1,20 @@
+﻿<div id="navigation">
+    <ul class="nav metismenu" id="side-menu">
+        <li class="@Html.IsSelected(action: "Index")">
+            <a href="@Url.Action("Index", "Dashboard")"> <span class="nav-label">Dashboard</span> </a>
+        </li>
+        <li class="@Html.IsSelected(controller: "Dashboard")">
+            <a href="#"><span class="nav-label">Execution Metrics</span><span class="fa arrow"></span> </a>
+            <ul class="nav nav-second-level">
+                <li class="@Html.IsSelected(action: "FirstTimePass")"><a href="@Url.Action("FirstTimePass", "Dashboard")">First Time Passed Percentage</a></li>
+                <li class="@Html.IsSelected(action: "FirstTimeFail")"><a href="@Url.Action("FirstTimeFail", "Dashboard")">First Time Failed Percentage</a></li>
+                <li class="@Html.IsSelected(action: "ReRun")"><a href="@Url.Action("ReRun", "Dashboard")">Re-Run Failed Percentage</a></li>
+                <li class="@Html.IsSelected(action: "ExecutionData")"><a href="@Url.Action("ExecutionData", "Dashboard")">Execution Raw Data</a></li>
+            </ul>
+            <a href="#"><span class="nav-label">Defect Metrics</span><span class="fa arrow"></span> </a>
+            <ul class="nav nav-second-level">
+                <li class="@Html.IsSelected(action: "DefectData")"><a href="@Url.Action("DefectData", "Dashboard")">Critical-Major Defects Age Data</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>

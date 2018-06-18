@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ls_dashboardModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cycles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CycleName" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="DataRefresh">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastUpdated" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="DefectMetrics">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Project" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Application" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="AgeWeek" Type="int" />
+          <Property Name="AgeBiWeek" Type="int" />
+          <Property Name="AgeThreeMonth" Type="int" />
+          <Property Name="AgeOther" Type="int" />
+        </EntityType>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
+          <Property Name="DatabaseName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="WeeklyExecutionMetrics">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WeekStartDate" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="WeekEndDate" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CalenderWeek" Type="int" Nullable="false" />
+          <Property Name="Project" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Application" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TotalFirstTimeTestInstances" Type="int" />
+          <Property Name="TotalFirstTimePassed" Type="int" />
+          <Property Name="TotalFirstTimeFailed" Type="int" />
+          <Property Name="TotalInstances" Type="int" />
+          <Property Name="TotalPassedInstances" Type="int" />
+          <Property Name="TotalFailedInstances" Type="int" />
+          <Property Name="TotalReTestInstances" Type="int" />
+          <Property Name="ReTestPassedInstances" Type="int" />
+          <Property Name="ReTestFailedInstances" Type="int" />
+          <Property Name="PercentFirstTimeInstancesPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentFirstTimeInstancesFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalInstancesPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalInstancesFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReTestInstancesPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReTestInstancesFailed" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="WeeklyExecutionMetricsDetailed">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WeekStartDate" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="WeekEndDate" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CalenderWeek" Type="int" Nullable="false" />
+          <Property Name="Project" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Application" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProgramInitiative" Type="nvarchar" MaxLength="100" />
+          <Property Name="ReleaseCycle" Type="nvarchar" MaxLength="100" />
+          <Property Name="TestSet" Type="nvarchar" MaxLength="100" />
+          <Property Name="TestInstanceId" Type="int" Nullable="false" />
+          <Property Name="TestId" Type="int" Nullable="false" />
+          <Property Name="TestName" Type="nvarchar(max)" />
+          <Property Name="ExecutionDate" Type="date" />
+        </EntityType>
+        <EntityType Name="WeeklyExecutionMetricsProgramInit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WeekStartDate" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="WeekEndDate" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CalenderWeek" Type="int" Nullable="false" />
+          <Property Name="Project" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Application" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProgramInitiative" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TotalFirstTimeTestInstances" Type="int" />
+          <Property Name="TotalFirstTimePassed" Type="int" />
+          <Property Name="TotalFirstTimeFailed" Type="int" />
+          <Property Name="TotalInstances" Type="int" />
+          <Property Name="TotalPassedInstances" Type="int" />
+          <Property Name="TotalFailedInstances" Type="int" />
+          <Property Name="TotalReTestInstances" Type="int" />
+          <Property Name="ReTestPassedInstances" Type="int" />
+          <Property Name="ReTestFailedInstances" Type="int" />
+          <Property Name="PercentFirstTimeInstancesPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentFirstTimeInstancesFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalInstancesPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalInstancesFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReTestInstancesPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReTestInstancesFailed" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityContainer Name="ls_dashboardModelStoreContainer">
+          <EntitySet Name="Cycles" EntityType="Self.Cycles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataRefresh" EntityType="Self.DataRefresh" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DefectMetrics" EntityType="Self.DefectMetrics" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WeeklyExecutionMetrics" EntityType="Self.WeeklyExecutionMetrics" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WeeklyExecutionMetricsDetailed" EntityType="Self.WeeklyExecutionMetricsDetailed" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WeeklyExecutionMetricsProgramInit" EntityType="Self.WeeklyExecutionMetricsProgramInit" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ls_dashboardModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ls_dashboardEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Projects" EntityType="ls_dashboardModel.Project" />
+          <EntitySet Name="DataRefreshes" EntityType="ls_dashboardModel.DataRefresh" />
+          <EntitySet Name="Cycles" EntityType="ls_dashboardModel.Cycle" />
+          <EntitySet Name="DefectMetrics" EntityType="ls_dashboardModel.DefectMetric" />
+          <EntitySet Name="WeeklyExecutionMetrics" EntityType="ls_dashboardModel.WeeklyExecutionMetric" />
+          <EntitySet Name="WeeklyExecutionMetricsDetaileds" EntityType="ls_dashboardModel.WeeklyExecutionMetricsDetailed" />
+          <EntitySet Name="WeeklyExecutionMetricsProgramInits" EntityType="ls_dashboardModel.WeeklyExecutionMetricsProgramInit" />
+        </EntityContainer>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DatabaseName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DataRefresh">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastUpdated" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Cycle">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CycleName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DefectMetric">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Project" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Application" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AgeWeek" Type="Int32" />
+          <Property Name="AgeBiWeek" Type="Int32" />
+          <Property Name="AgeThreeMonth" Type="Int32" />
+          <Property Name="AgeOther" Type="Int32" />
+        </EntityType>
+        <EntityType Name="WeeklyExecutionMetric">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WeekStartDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="WeekEndDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CalenderWeek" Type="Int32" Nullable="false" />
+          <Property Name="Project" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Application" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TotalFirstTimeTestInstances" Type="Int32" />
+          <Property Name="TotalFirstTimePassed" Type="Int32" />
+          <Property Name="TotalFirstTimeFailed" Type="Int32" />
+          <Property Name="TotalInstances" Type="Int32" />
+          <Property Name="TotalPassedInstances" Type="Int32" />
+          <Property Name="TotalFailedInstances" Type="Int32" />
+          <Property Name="TotalReTestInstances" Type="Int32" />
+          <Property Name="ReTestPassedInstances" Type="Int32" />
+          <Property Name="ReTestFailedInstances" Type="Int32" />
+          <Property Name="PercentFirstTimeInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentFirstTimeInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReTestInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReTestInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="WeeklyExecutionMetricsDetailed">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WeekStartDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="WeekEndDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CalenderWeek" Type="Int32" Nullable="false" />
+          <Property Name="Project" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Application" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProgramInitiative" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReleaseCycle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TestSet" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TestInstanceId" Type="Int32" Nullable="false" />
+          <Property Name="TestId" Type="Int32" Nullable="false" />
+          <Property Name="TestName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExecutionDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="WeeklyExecutionMetricsProgramInit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WeekStartDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="WeekEndDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CalenderWeek" Type="Int32" Nullable="false" />
+          <Property Name="Project" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Application" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProgramInitiative" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TotalFirstTimeTestInstances" Type="Int32" />
+          <Property Name="TotalFirstTimePassed" Type="Int32" />
+          <Property Name="TotalFirstTimeFailed" Type="Int32" />
+          <Property Name="TotalInstances" Type="Int32" />
+          <Property Name="TotalPassedInstances" Type="Int32" />
+          <Property Name="TotalFailedInstances" Type="Int32" />
+          <Property Name="TotalReTestInstances" Type="Int32" />
+          <Property Name="ReTestPassedInstances" Type="Int32" />
+          <Property Name="ReTestFailedInstances" Type="Int32" />
+          <Property Name="PercentFirstTimeInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentFirstTimeInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReTestInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReTestInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ls_dashboardModelStoreContainer" CdmEntityContainer="ls_dashboardEntities">
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="ls_dashboardModel.Project">
+              <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataRefreshes">
+            <EntityTypeMapping TypeName="ls_dashboardModel.DataRefresh">
+              <MappingFragment StoreEntitySet="DataRefresh">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cycles">
+            <EntityTypeMapping TypeName="ls_dashboardModel.Cycle">
+              <MappingFragment StoreEntitySet="Cycles">
+                <ScalarProperty Name="CycleName" ColumnName="CycleName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DefectMetrics">
+            <EntityTypeMapping TypeName="ls_dashboardModel.DefectMetric">
+              <MappingFragment StoreEntitySet="DefectMetrics">
+                <ScalarProperty Name="AgeOther" ColumnName="AgeOther" />
+                <ScalarProperty Name="AgeThreeMonth" ColumnName="AgeThreeMonth" />
+                <ScalarProperty Name="AgeBiWeek" ColumnName="AgeBiWeek" />
+                <ScalarProperty Name="AgeWeek" ColumnName="AgeWeek" />
+                <ScalarProperty Name="Application" ColumnName="Application" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WeeklyExecutionMetrics">
+            <EntityTypeMapping TypeName="ls_dashboardModel.WeeklyExecutionMetric">
+              <MappingFragment StoreEntitySet="WeeklyExecutionMetrics">
+                <ScalarProperty Name="PercentageReTestInstancesFailed" ColumnName="PercentageReTestInstancesFailed" />
+                <ScalarProperty Name="PercentageReTestInstancesPassed" ColumnName="PercentageReTestInstancesPassed" />
+                <ScalarProperty Name="PercentageTotalInstancesFailed" ColumnName="PercentageTotalInstancesFailed" />
+                <ScalarProperty Name="PercentageTotalInstancesPassed" ColumnName="PercentageTotalInstancesPassed" />
+                <ScalarProperty Name="PercentFirstTimeInstancesFailed" ColumnName="PercentFirstTimeInstancesFailed" />
+                <ScalarProperty Name="PercentFirstTimeInstancesPassed" ColumnName="PercentFirstTimeInstancesPassed" />
+                <ScalarProperty Name="ReTestFailedInstances" ColumnName="ReTestFailedInstances" />
+                <ScalarProperty Name="ReTestPassedInstances" ColumnName="ReTestPassedInstances" />
+                <ScalarProperty Name="TotalReTestInstances" ColumnName="TotalReTestInstances" />
+                <ScalarProperty Name="TotalFailedInstances" ColumnName="TotalFailedInstances" />
+                <ScalarProperty Name="TotalPassedInstances" ColumnName="TotalPassedInstances" />
+                <ScalarProperty Name="TotalInstances" ColumnName="TotalInstances" />
+                <ScalarProperty Name="TotalFirstTimeFailed" ColumnName="TotalFirstTimeFailed" />
+                <ScalarProperty Name="TotalFirstTimePassed" ColumnName="TotalFirstTimePassed" />
+                <ScalarProperty Name="TotalFirstTimeTestInstances" ColumnName="TotalFirstTimeTestInstances" />
+                <ScalarProperty Name="Application" ColumnName="Application" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="CalenderWeek" ColumnName="CalenderWeek" />
+                <ScalarProperty Name="WeekEndDate" ColumnName="WeekEndDate" />
+                <ScalarProperty Name="WeekStartDate" ColumnName="WeekStartDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WeeklyExecutionMetricsDetaileds">
+            <EntityTypeMapping TypeName="ls_dashboardModel.WeeklyExecutionMetricsDetailed">
+              <MappingFragment StoreEntitySet="WeeklyExecutionMetricsDetailed">
+                <ScalarProperty Name="ExecutionDate" ColumnName="ExecutionDate" />
+                <ScalarProperty Name="TestName" ColumnName="TestName" />
+                <ScalarProperty Name="TestId" ColumnName="TestId" />
+                <ScalarProperty Name="TestInstanceId" ColumnName="TestInstanceId" />
+                <ScalarProperty Name="TestSet" ColumnName="TestSet" />
+                <ScalarProperty Name="ReleaseCycle" ColumnName="ReleaseCycle" />
+                <ScalarProperty Name="ProgramInitiative" ColumnName="ProgramInitiative" />
+                <ScalarProperty Name="Application" ColumnName="Application" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="CalenderWeek" ColumnName="CalenderWeek" />
+                <ScalarProperty Name="WeekEndDate" ColumnName="WeekEndDate" />
+                <ScalarProperty Name="WeekStartDate" ColumnName="WeekStartDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WeeklyExecutionMetricsProgramInits">
+            <EntityTypeMapping TypeName="ls_dashboardModel.WeeklyExecutionMetricsProgramInit">
+              <MappingFragment StoreEntitySet="WeeklyExecutionMetricsProgramInit">
+                <ScalarProperty Name="PercentageReTestInstancesFailed" ColumnName="PercentageReTestInstancesFailed" />
+                <ScalarProperty Name="PercentageReTestInstancesPassed" ColumnName="PercentageReTestInstancesPassed" />
+                <ScalarProperty Name="PercentageTotalInstancesFailed" ColumnName="PercentageTotalInstancesFailed" />
+                <ScalarProperty Name="PercentageTotalInstancesPassed" ColumnName="PercentageTotalInstancesPassed" />
+                <ScalarProperty Name="PercentFirstTimeInstancesFailed" ColumnName="PercentFirstTimeInstancesFailed" />
+                <ScalarProperty Name="PercentFirstTimeInstancesPassed" ColumnName="PercentFirstTimeInstancesPassed" />
+                <ScalarProperty Name="ReTestFailedInstances" ColumnName="ReTestFailedInstances" />
+                <ScalarProperty Name="ReTestPassedInstances" ColumnName="ReTestPassedInstances" />
+                <ScalarProperty Name="TotalReTestInstances" ColumnName="TotalReTestInstances" />
+                <ScalarProperty Name="TotalFailedInstances" ColumnName="TotalFailedInstances" />
+                <ScalarProperty Name="TotalPassedInstances" ColumnName="TotalPassedInstances" />
+                <ScalarProperty Name="TotalInstances" ColumnName="TotalInstances" />
+                <ScalarProperty Name="TotalFirstTimeFailed" ColumnName="TotalFirstTimeFailed" />
+                <ScalarProperty Name="TotalFirstTimePassed" ColumnName="TotalFirstTimePassed" />
+                <ScalarProperty Name="TotalFirstTimeTestInstances" ColumnName="TotalFirstTimeTestInstances" />
+                <ScalarProperty Name="ProgramInitiative" ColumnName="ProgramInitiative" />
+                <ScalarProperty Name="Application" ColumnName="Application" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="CalenderWeek" ColumnName="CalenderWeek" />
+                <ScalarProperty Name="WeekEndDate" ColumnName="WeekEndDate" />
+                <ScalarProperty Name="WeekStartDate" ColumnName="WeekStartDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

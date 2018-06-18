@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    var lastUpdated = ViewBag.LastUpdated;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="content animate-panel">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="hpanel hyellow">
+                    <div class="panel-heading hbuilt">
+                        <div class="pull-right">
+                            <a class="btn btn-default btn-xs" id="ftpshow">Show Series</a>
+                            <a class="btn btn-default btn-xs" id="ftphide">Hide Series</a>
+                            <a class="btn btn-default btn-xs" id="ftphow" data-toggle="modal" data-target="#metricinfo"><i class="fa fa-question"></i></a>
+                        </div>
+                        Re-Run Fail Percentage
+                    </div>
+                    <div class="panel-body">
+                        <div id="ftpcontainer" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+                    </div>
+                    <div class="panel-footer">
+                        Last Updated On: @lastUpdated
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>  
+            @Html.Partial("Information")  
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery.loadingModal.css" />
+}
+
+@section Scripts {
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="~/Scripts/jquery.loadingModal.js"></script>
+
+    <script type="text/javascript">
+        $('body').loadingModal({ text: 'Fetching data...', 'animation': 'wanderingCubes' });
+        $.getJSON('/Dashboard/FetchRt', function (data) {
+            console.log(data);
+            var obj = JSON.parse(data);
+            console.log(obj[0].data.toString());
+            console.log(obj[1].data.toString());
+
+            Highcharts.chart('ftpcontainer', {
+
+                chart: {
+                    type: 'spline'
+                },
+
+                title: {
+                    text: 'Re-Run Rate By Application - 2018'
+                },
+
+                credits: {
+                    enabled: false
+                },
+
+                yAxis: {
+                    title: {
+                        text: 'Re-Run Percentage %'
+                    },
+                        max: 100,
+                        min:0
+                },
+                xAxis: {
+                    categories: obj[0].data
+                },
+
+                series: obj[1].data
+
+            });
+
+            var chart = $('#ftpcontainer').highcharts(),
+            $button = $('#ftphide');
+            $button.click(function() {
+                $(chart.series).each(function () {
+                    this.setVisible(false, false);
+                });
+                chart.redraw();
+            });
+
+            $button = $('#ftpshow');
+            $button.click(function() {
+                $(chart.series).each(function(){
+                    this.setVisible(true, false);
+                });
+                chart.redraw();
+            });
+
+            $('body').loadingModal('destroy');
+
+        });
+
+    </script>
+
+}

@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h2 class="m-b-xs">First Time Passed Percentage</h2>
+                        <div class="m">
+                            <i class="pe-7s-cup fa-5x"></i>
+                        </div>
+                        <p class="small">
+                            All test instances started execution within a given period and having first run status as Passed
+                        </p>
+                        <a class="btn btn-success btn-md" href="Dashboard/FirstTimePass">Browse</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h2 class="m-b-xs">First Time Failed Percentage</h2>
+                        <div class="m">
+                            <i class="pe-7s-bell fa-5x"></i>
+                        </div>
+                        <p class="small">
+                            All test instances started execution within a given period and having first run status as Failed
+                        </p>
+                        <a class="btn btn-danger btn-md" href="Dashboard/FirstTimeFail">Browse</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h2 class="m-b-xs">Re-Run Fail Percentage</h2>
+                        <div class="m">
+                            <i class="pe-7s-repeat fa-5x"></i>
+                        </div>
+                        <p class="small">
+                            All test instances executed within a given period that are not part of the first time execution of test instance.
+                        </p>
+                        <a class="btn btn-warning btn-md" href="Dashboard/ReRun">Browse</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-3">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div class="stats-title pull-left">
+                        <h4>Execution Raw Data</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-download fa-4x"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <small>
+                            Raw data for Executions.
+                        </small>
+                    </div>
+                    <p></p>
+                    <a class="btn btn-info btn-md" href="Dashboard/ExecutionData">Browse</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div class="stats-title pull-left">
+                        <h4>Defects Raw Data</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-download fa-4x"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <small>
+                            Raw data for Defects.
+                        </small>
+                    </div>
+                    <p></p>
+                    <a class="btn btn-info btn-md" href="Dashboard/DefectData">Browse</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
