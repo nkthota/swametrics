@@ -21,20 +21,20 @@ namespace SWAMetrics.Models
         public string Project { get; set; }
         public string Application { get; set; }
         public string ProgramInitiative { get; set; }
-        public Nullable<int> TotalFirstTimeTestInstances { get; set; }
-        public Nullable<int> TotalFirstTimePassed { get; set; }
-        public Nullable<int> TotalFirstTimeFailed { get; set; }
-        public Nullable<int> TotalInstances { get; set; }
-        public Nullable<int> TotalPassedInstances { get; set; }
-        public Nullable<int> TotalFailedInstances { get; set; }
-        public Nullable<int> TotalReTestInstances { get; set; }
-        public Nullable<int> ReTestPassedInstances { get; set; }
-        public Nullable<int> ReTestFailedInstances { get; set; }
-        public Nullable<decimal> PercentFirstTimeInstancesPassed { get; set; }
-        public Nullable<decimal> PercentFirstTimeInstancesFailed { get; set; }
-        public Nullable<decimal> PercentageTotalInstancesPassed { get; set; }
-        public Nullable<decimal> PercentageTotalInstancesFailed { get; set; }
-        public Nullable<decimal> PercentageReTestInstancesPassed { get; set; }
-        public Nullable<decimal> PercentageReTestInstancesFailed { get; set; }
+        public Nullable<int> TotalFirstTimeRuns { get; set; }
+        public Nullable<int> TotalFirstTimePassedRuns { get; set; }
+        public Nullable<int> TotalFirstTimeFailedRuns { get; set; }
+        public Nullable<int> TotalRuns { get; set; }
+        public Nullable<int> TotalPassedRuns { get; set; }
+        public Nullable<int> TotalFailedRuns { get; set; }
+        public Nullable<int> TotalReRuns { get; set; }
+        public Nullable<int> TotalReRunPassed { get; set; }
+        public Nullable<int> TotalReRunFailed { get; set; }
+        public Nullable<decimal> PercentFirstRunPassed { get; set; }
+        public Nullable<decimal> PercentFirstRunFailed { get; set; }
+        public Nullable<decimal> PercentageTotalRunsPassed { get; set; }
+        public Nullable<decimal> PercentageTotalRunsFailed { get; set; }
+        public Nullable<decimal> PercentageReRunPassed { get; set; }
+        public Nullable<decimal> PercentageReRunFailed { get; set; }
     }
 }

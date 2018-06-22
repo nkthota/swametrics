@@ -22,68 +22,12 @@
                             <table id="example" class="display table table-bordered" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>WeekStartDate</th>
-                                        <th>WeekEndDate</th>
-                                        <th>CalenderWeek</th>
-                                        <th>Project</th>
-                                        <th>Application</th>
-                                        <th>ProgramInitiative</th>
-                                        
-
-                                        <th>TotalFirstTimeTestInstances</th>
-                                        <th>TotalFirstTimePassed</th>
-                                        <th>TotalFirstTimeFailed</th>
-
-                                        <th>TotalInstances</th>
-                                        <th>TotalPassedInstances</th>
-                                        <th>TotalFailedInstances</th>
-
-                                        <th>TotalReTestInstances</th>
-                                        <th>ReTestPassedInstances</th>
-                                        <th>ReTestFailedInstances</th>
-
-
-                                        <th>PercentFirstTimeInstancesPassed</th>
-                                        <th>PercentFirstTimeInstancesFailed</th>
-
-                                        <th>PercentageTotalInstancesPassed</th>
-                                        <th>PercentageTotalInstancesFailed</th>
-
-                                        <th>PercentageReTestInstancesPassed</th>
-                                        <th>PercentageReTestInstancesFailed</th>
-
+                                        <th>WeekStartDate</th>	<th>WeekEndDate</th>	<th>CalenderWeek</th>	<th>Project</th>	<th>Application</th>	<th>ProgramInitiative</th>	<th>TotalFirstTimeRuns</th>	<th>TotalFirstTimePassedRuns</th>	<th>TotalFirstTimeFailedRuns</th>	<th>TotalRuns</th>	<th>TotalPassedRuns</th>	<th>TotalFailedRuns</th>	<th>TotalReRuns</th>	<th>TotalReRunPassed</th>	<th>TotalReRunFailed</th>	<th>PercentFirstRunPassed</th>	<th>PercentFirstRunFailed</th>	<th>PercentageTotalRunsPassed</th>	<th>PercentageTotalRunsFailed</th>	<th>PercentageReRunPassed</th>	<th>PercentageReRunFailed</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>WeekStartDate</th>
-                                        <th>WeekEndDate</th>
-                                        <th>CalenderWeek</th>
-                                        <th>Project</th>
-                                        <th>Application</th>
-                                        <th>ProgramInitiative</th>
-
-                                        <th>TotalFirstTimeTestInstances</th>
-                                        <th>TotalFirstTimePassed</th>
-                                        <th>TotalFirstTimeFailed</th>
-
-                                        <th>TotalInstances</th>
-                                        <th>TotalPassedInstances</th>
-                                        <th>TotalFailedInstances</th>
-
-                                        <th>TotalReTestInstances</th>
-                                        <th>ReTestPassedInstances</th>
-                                        <th>ReTestFailedInstances</th>
-
-
-                                        <th>PercentFirstTimeInstancesPassed</th>
-                                        <th>PercentFirstTimeInstancesFailed</th>
-
-                                        <th>PercentageTotalInstancesPassed</th>
-                                        <th>PercentageTotalInstancesFailed</th>
-
-                                        <th>PercentageReTestInstancesPassed</th>
-                                        <th>PercentageReTestInstancesFailed</th>
+                                        <th>WeekStartDate</th>	<th>WeekEndDate</th>	<th>CalenderWeek</th>	<th>Project</th>	<th>Application</th>	<th>ProgramInitiative</th>	<th>TotalFirstTimeRuns</th>	<th>TotalFirstTimePassedRuns</th>	<th>TotalFirstTimeFailedRuns</th>	<th>TotalRuns</th>	<th>TotalPassedRuns</th>	<th>TotalFailedRuns</th>	<th>TotalReRuns</th>	<th>TotalReRunPassed</th>	<th>TotalReRunFailed</th>	<th>PercentFirstRunPassed</th>	<th>PercentFirstRunFailed</th>	<th>PercentageTotalRunsPassed</th>	<th>PercentageTotalRunsFailed</th>	<th>PercentageReRunPassed</th>	<th>PercentageReRunFailed</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -143,13 +87,7 @@
                             <h3>First Time Pass Fail Percentage</h3>
                             <hr />
                             <div class="note-content">
-                                <textarea class="form-control">
-                                    Total First Time execution test instances: If a test instance is executed for the first time in the given time period, (in this case weekly)
-                                    and ended with status Passed or Failed then it is considered for this metric.
-
-                                    Passed and Failed counts are derived from the total executions with-in the time period based on the status of the test instance 
-                                    first execution.                                
-                                </textarea>
+                                <span>First execution run status of a Test Instance executed in the given time period. This alos implies the number of Test Instances that are executed for the first time in the given time period.</span>
                             </div>
                         </div>
 
@@ -157,28 +95,15 @@
                             <h3>Total Pass Fail Percentage </h3>
                             <hr />
                             <div class="note-content">
-                                <textarea class="form-control">
-                                    Total Test Instance execution: If a test instance happens to be executed in the given time period, (in this case weekly) then it is considered
-                                    towards total test instance executed count.
-
-                                    Each test instance status is derived based on the latest execution status of that instance in the given period.
-
-                                    If a test instance is executed 5 times within a time period and having different status in each run, the 5th run status is considered.
-
-                                </textarea>
+                                <span>Total Runs in the given time period with status Passed/Failed. All other execution status are ignored.</span>
                             </div>
                         </div>
 
                         <div id="note3" class="tab-pane">
                             <h3>Re-Run Pass Faill Percentage </h3>
                             <hr />
-                            <div class="note-content">
-                                <textarea class="form-control">
-                                    Re-Run Test Instances execution: If a test instance has a corresponding run in a given time period with status Passed or Failed which is not a
-                                    first, run for that test instance, it is considered as a re-run test instance.
-
-                                    Test instance having multiple runs within the same period of the even it has first run in same period is considered as a re-run count.
-                                </textarea>
+                            <div class="note-content">                                                                    
+                                    <span>Total Runs - Total First Runs</span>                                
                             </div>
                         </div>
 
@@ -221,36 +146,7 @@
                     ],
                     "pageLength": 10,
                     "columns": [
-                        { "data": "WeekStartDate", "autoWidth": true },
-                        { "data": "WeekEndDate", "autoWidth": true }, 
-                        { "data": "CalenderWeek", "autoWidth": true },
-                        { "data": "Project", "autoWidth": true },
-                        { "data": "Application", "autoWidth": true },
-                        { "data": "ProgramInitiative", "autoWidth": true },
-
-                        { "data": "TotalFirstTimeTestInstances", "autoWidth": true },
-                        { "data": "TotalFirstTimePassed", "autoWidth": true },
-                        { "data": "TotalFirstTimeFailed", "autoWidth": true },
-
-                        { "data": "TotalInstances", "autoWidth": true },
-                        { "data": "TotalPassedInstances", "autoWidth": true },
-                        { "data": "TotalFailedInstances", "autoWidth": true },
-
-
-                        { "data": "TotalReTestInstances", "autoWidth": true },
-                        { "data": "ReTestPassedInstances", "autoWidth": true },
-                        { "data": "ReTestFailedInstances", "autoWidth": true },
-
-
-                        { "data": "PercentFirstTimeInstancesPassed", "autoWidth": true },
-                        { "data": "PercentFirstTimeInstancesFailed", "autoWidth": true },
-
-
-                        { "data": "PercentageTotalInstancesPassed", "autoWidth": true },
-                        { "data": "PercentageTotalInstancesFailed", "autoWidth": true },
-
-                        { "data": "PercentageReTestInstancesPassed", "autoWidth": true },
-                        { "data": "PercentageReTestInstancesFailed", "autoWidth": true }
+                        { "data": "WeekStartDate", "autoWidth": true }, { "data": "WeekEndDate", "autoWidth": true }, { "data": "CalenderWeek", "autoWidth": true }, { "data": "Project", "autoWidth": true }, { "data": "Application", "autoWidth": true }, { "data": "ProgramInitiative", "autoWidth": true }, { "data": "TotalFirstTimeRuns", "autoWidth": true }, { "data": "TotalFirstTimePassedRuns", "autoWidth": true }, { "data": "TotalFirstTimeFailedRuns", "autoWidth": true }, { "data": "TotalRuns", "autoWidth": true }, { "data": "TotalPassedRuns", "autoWidth": true }, { "data": "TotalFailedRuns", "autoWidth": true }, { "data": "TotalReRuns", "autoWidth": true }, { "data": "TotalReRunPassed", "autoWidth": true }, { "data": "TotalReRunFailed", "autoWidth": true }, { "data": "PercentFirstRunPassed", "autoWidth": true }, { "data": "PercentFirstRunFailed", "autoWidth": true }, { "data": "PercentageTotalRunsPassed", "autoWidth": true }, { "data": "PercentageTotalRunsFailed", "autoWidth": true }, { "data": "PercentageReRunPassed", "autoWidth": true }, { "data": "PercentageReRunFailed", "autoWidth": true }
                     ],
                     initComplete: function () {
                         this.api().columns().every(function () {

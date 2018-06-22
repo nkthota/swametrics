@@ -94,21 +94,21 @@
           <Property Name="Project" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Application" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="ProgramInitiative" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="TotalFirstTimeTestInstances" Type="int" />
-          <Property Name="TotalFirstTimePassed" Type="int" />
-          <Property Name="TotalFirstTimeFailed" Type="int" />
-          <Property Name="TotalInstances" Type="int" />
-          <Property Name="TotalPassedInstances" Type="int" />
-          <Property Name="TotalFailedInstances" Type="int" />
-          <Property Name="TotalReTestInstances" Type="int" />
-          <Property Name="ReTestPassedInstances" Type="int" />
-          <Property Name="ReTestFailedInstances" Type="int" />
-          <Property Name="PercentFirstTimeInstancesPassed" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="PercentFirstTimeInstancesFailed" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="PercentageTotalInstancesPassed" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="PercentageTotalInstancesFailed" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="PercentageReTestInstancesPassed" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="PercentageReTestInstancesFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="TotalFirstTimeRuns" Type="int" />
+          <Property Name="TotalFirstTimePassedRuns" Type="int" />
+          <Property Name="TotalFirstTimeFailedRuns" Type="int" />
+          <Property Name="TotalRuns" Type="int" />
+          <Property Name="TotalPassedRuns" Type="int" />
+          <Property Name="TotalFailedRuns" Type="int" />
+          <Property Name="TotalReRuns" Type="int" />
+          <Property Name="TotalReRunPassed" Type="int" />
+          <Property Name="TotalReRunFailed" Type="int" />
+          <Property Name="PercentFirstRunPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentFirstRunFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalRunsPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalRunsFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReRunPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReRunFailed" Type="decimal" Precision="5" Scale="2" />
         </EntityType>
         <EntityContainer Name="ls_dashboardModelStoreContainer">
           <EntitySet Name="Cycles" EntityType="Self.Cycles" Schema="dbo" store:Type="Tables" />
@@ -221,21 +221,21 @@
           <Property Name="Project" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Application" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ProgramInitiative" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TotalFirstTimeTestInstances" Type="Int32" />
-          <Property Name="TotalFirstTimePassed" Type="Int32" />
-          <Property Name="TotalFirstTimeFailed" Type="Int32" />
-          <Property Name="TotalInstances" Type="Int32" />
-          <Property Name="TotalPassedInstances" Type="Int32" />
-          <Property Name="TotalFailedInstances" Type="Int32" />
-          <Property Name="TotalReTestInstances" Type="Int32" />
-          <Property Name="ReTestPassedInstances" Type="Int32" />
-          <Property Name="ReTestFailedInstances" Type="Int32" />
-          <Property Name="PercentFirstTimeInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="PercentFirstTimeInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="PercentageTotalInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="PercentageTotalInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="PercentageReTestInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="PercentageReTestInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="TotalFirstTimeRuns" Type="Int32" />
+          <Property Name="TotalFirstTimePassedRuns" Type="Int32" />
+          <Property Name="TotalFirstTimeFailedRuns" Type="Int32" />
+          <Property Name="TotalRuns" Type="Int32" />
+          <Property Name="TotalPassedRuns" Type="Int32" />
+          <Property Name="TotalFailedRuns" Type="Int32" />
+          <Property Name="TotalReRuns" Type="Int32" />
+          <Property Name="TotalReRunPassed" Type="Int32" />
+          <Property Name="TotalReRunFailed" Type="Int32" />
+          <Property Name="PercentFirstRunPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentFirstRunFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalRunsPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalRunsFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReRunPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReRunFailed" Type="Decimal" Precision="5" Scale="2" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -330,21 +330,21 @@
           <EntitySetMapping Name="WeeklyExecutionMetricsProgramInits">
             <EntityTypeMapping TypeName="ls_dashboardModel.WeeklyExecutionMetricsProgramInit">
               <MappingFragment StoreEntitySet="WeeklyExecutionMetricsProgramInit">
-                <ScalarProperty Name="PercentageReTestInstancesFailed" ColumnName="PercentageReTestInstancesFailed" />
-                <ScalarProperty Name="PercentageReTestInstancesPassed" ColumnName="PercentageReTestInstancesPassed" />
-                <ScalarProperty Name="PercentageTotalInstancesFailed" ColumnName="PercentageTotalInstancesFailed" />
-                <ScalarProperty Name="PercentageTotalInstancesPassed" ColumnName="PercentageTotalInstancesPassed" />
-                <ScalarProperty Name="PercentFirstTimeInstancesFailed" ColumnName="PercentFirstTimeInstancesFailed" />
-                <ScalarProperty Name="PercentFirstTimeInstancesPassed" ColumnName="PercentFirstTimeInstancesPassed" />
-                <ScalarProperty Name="ReTestFailedInstances" ColumnName="ReTestFailedInstances" />
-                <ScalarProperty Name="ReTestPassedInstances" ColumnName="ReTestPassedInstances" />
-                <ScalarProperty Name="TotalReTestInstances" ColumnName="TotalReTestInstances" />
-                <ScalarProperty Name="TotalFailedInstances" ColumnName="TotalFailedInstances" />
-                <ScalarProperty Name="TotalPassedInstances" ColumnName="TotalPassedInstances" />
-                <ScalarProperty Name="TotalInstances" ColumnName="TotalInstances" />
-                <ScalarProperty Name="TotalFirstTimeFailed" ColumnName="TotalFirstTimeFailed" />
-                <ScalarProperty Name="TotalFirstTimePassed" ColumnName="TotalFirstTimePassed" />
-                <ScalarProperty Name="TotalFirstTimeTestInstances" ColumnName="TotalFirstTimeTestInstances" />
+                <ScalarProperty Name="PercentageReRunFailed" ColumnName="PercentageReRunFailed" />
+                <ScalarProperty Name="PercentageReRunPassed" ColumnName="PercentageReRunPassed" />
+                <ScalarProperty Name="PercentageTotalRunsFailed" ColumnName="PercentageTotalRunsFailed" />
+                <ScalarProperty Name="PercentageTotalRunsPassed" ColumnName="PercentageTotalRunsPassed" />
+                <ScalarProperty Name="PercentFirstRunFailed" ColumnName="PercentFirstRunFailed" />
+                <ScalarProperty Name="PercentFirstRunPassed" ColumnName="PercentFirstRunPassed" />
+                <ScalarProperty Name="TotalReRunFailed" ColumnName="TotalReRunFailed" />
+                <ScalarProperty Name="TotalReRunPassed" ColumnName="TotalReRunPassed" />
+                <ScalarProperty Name="TotalReRuns" ColumnName="TotalReRuns" />
+                <ScalarProperty Name="TotalFailedRuns" ColumnName="TotalFailedRuns" />
+                <ScalarProperty Name="TotalPassedRuns" ColumnName="TotalPassedRuns" />
+                <ScalarProperty Name="TotalRuns" ColumnName="TotalRuns" />
+                <ScalarProperty Name="TotalFirstTimeFailedRuns" ColumnName="TotalFirstTimeFailedRuns" />
+                <ScalarProperty Name="TotalFirstTimePassedRuns" ColumnName="TotalFirstTimePassedRuns" />
+                <ScalarProperty Name="TotalFirstTimeRuns" ColumnName="TotalFirstTimeRuns" />
                 <ScalarProperty Name="ProgramInitiative" ColumnName="ProgramInitiative" />
                 <ScalarProperty Name="Application" ColumnName="Application" />
                 <ScalarProperty Name="Project" ColumnName="Project" />

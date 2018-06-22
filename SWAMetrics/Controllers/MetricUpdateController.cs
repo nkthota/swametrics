@@ -49,10 +49,10 @@ namespace SWAMetrics.Controllers
 
         public ViewResult UpdateWeeklyMetricsProgramInit(int? id)
         {
-            //DateTime start = new DateTime(DateTime.Today.Year, 1, 1);
+            DateTime start = new DateTime(DateTime.Today.Year, 1, 1);
             //DateTime start = new DateTime(DateTime.Today.Year, 6, 1);
             //DateTime end = start.AddYears(1);
-            DateTime start = DateTime.Now.AddDays(Convert.ToDouble(-id));
+            //DateTime start = DateTime.Now.AddDays(Convert.ToDouble(-id));
             DateTime end = DateTime.Now;
             Week week = new Week(start);
             while (week.Start < end)
@@ -67,6 +67,7 @@ namespace SWAMetrics.Controllers
                             CalenderWeek = week.WeekOfYear,
                         };
                     weeklyUpdates.UpdatedByApplciationProgramInit();
+                    weeklyUpdates.DefectDetails();
                 }
                 week = week.GetNextWeek();
             }

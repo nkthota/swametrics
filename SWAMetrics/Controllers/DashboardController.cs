@@ -16,6 +16,11 @@ namespace SWAMetrics.Controllers
             return View();
         }
 
+        public ActionResult Sample()
+        {
+            return View("Sample");
+        }
+
         public ActionResult CycleFirstTimePass()
         {
             return View();
@@ -61,6 +66,12 @@ namespace SWAMetrics.Controllers
         {
             var data = _db.WeeklyExecutionMetrics;
             return Json(new { data = data.ToList() }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult LoadPivotData()
+        {
+            var data = _db.WeeklyExecutionMetricsProgramInits;
+            return Json(data.ToList(), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult LoadExecutionPIWeekly()

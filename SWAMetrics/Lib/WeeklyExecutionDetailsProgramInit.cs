@@ -29,135 +29,180 @@ namespace SWAMetrics.Lib
             return projectDb.SqlQuery(Sql);
         }
 
-        // Get the list of Test Instances that are passed and failed in a given time period. 
-        // TODO: ignored blocked test run for this time. focused more on passed and failed
-
-        private void UpdateTestInstaceCounts(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication, string currentProgramInit)
+        public void DefectDetails()
         {
             Sql =
-                $"select c.TS_USER_TEMPLATE_01 as ProgramInit, c.TS_USER_TEMPLATE_02 as Application, Count(c.TS_USER_TEMPLATE_02) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, max(RN_RUN_ID) as MaxRunId from td.RUN group by RN_TESTCYCL_ID having max(RN_EXECUTION_DATE) BETWEEN '{WeekStartDate}' and '{WeekEndDate}') b on a.RN_RUN_ID = b.MaxRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed') and c.TS_USER_TEMPLATE_02 = '{currentApplication}' and c.TS_USER_TEMPLATE_01 = '{currentProgramInit}' group by d.RN_STATUS, c.TS_USER_TEMPLATE_02, c.TS_USER_TEMPLATE_01";
+                $"SELECT BG_USER_TEMPLATE_02 as Application, sum(case when [BG_DETECTION_DATE] >= dateadd(day,-7,convert(date, GETDATE ())) then 1 else 0 end) as [Age7], sum(case when [BG_DETECTION_DATE] between dateadd(day,-14, convert(date, GETDATE ())) and dateadd(day,-8, convert(date, GETDATE ())) then 1 else 0 end) as [Age8-14], sum(case when [BG_DETECTION_DATE] between dateadd(day,-15, convert(date, GETDATE ())) and dateadd(day,-90, convert(date, GETDATE ())) then 1 else 0 end) as [Age15-90], sum(case when [BG_DETECTION_DATE] < dateadd(day,-14,convert(date, GETDATE ())) then 1 else 0 end) as [AgeAbove90] FROM td.BUG where [BG_USER_TEMPLATE_27] IS NOT NULL and [BG_USER_TEMPLATE_27] <> '18 - Closed' and BG_SEVERITY in ('1 - Critical', '2 - Major') and BG_DETECTION_DATE > '1/1/2018' GROUP BY BG_USER_TEMPLATE_02";
             _table = RunSql(Sql);
-            var passedCount = 0;
-            var failedCount = 0;
 
             if (_table != null)
             {
+
                 foreach (DataRow row in _table.Rows)
                 {
-                    if (row["RunStatus"].ToString() == "Passed")
-                    {
-                        passedCount = Convert.ToInt32(row["AppCount"]);
-                        if (recordWeek != null) recordWeek.TotalPassedInstances = Convert.ToInt32(row["AppCount"]);
-                    }
-
-                    if (row["RunStatus"].ToString() == "Failed")
-                    {
-                        failedCount = Convert.ToInt32(row["AppCount"]);
-                        if (recordWeek != null) recordWeek.TotalFailedInstances = Convert.ToInt32(row["AppCount"]);
-                    }
-
-                    if (recordWeek != null) recordWeek.TotalInstances = failedCount + passedCount;
-
-                    if (failedCount + passedCount != 0)
-                    {
-                        var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
-                        if (recordWeek != null)
-                            recordWeek.PercentageTotalInstancesPassed = Convert.ToDecimal(passPercentage);
-
-                        var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
-                        if (recordWeek != null)
-                            recordWeek.PercentageTotalInstancesFailed = Convert.ToDecimal(failPercentage);
-                    }
-
+                    InitDefects(row["Application"].ToString());
+                    var currentApplication = row["Application"].ToString();
+                    DefectMetric recordDefect =
+                        Db.DefectMetrics.SingleOrDefault(p =>
+                            p.Project == Project && p.Application == currentApplication);
+                    if (recordDefect != null) recordDefect.AgeWeek = Convert.ToInt32(row["Age7"]);
+                    if (recordDefect != null) recordDefect.AgeBiWeek = Convert.ToInt32(row["Age8-14"]);
+                    if (recordDefect != null) recordDefect.AgeThreeMonth = Convert.ToInt32(row["Age15-90"]);
+                    if (recordDefect != null) recordDefect.AgeOther = Convert.ToInt32(row["AgeAbove90"]);
                     Db.SaveChanges();
                 }
             }
 
         }
 
-        // Get the listf of First time passed and first time failed
-        private void UpdateFirstTimeCounts(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication, string currentProgramInit)
+        private void InitDefects(string application)
         {
-            Sql =
-                $"select c.TS_USER_TEMPLATE_01 as ProgramInit, c.TS_USER_TEMPLATE_02 as Application, Count(c.TS_USER_TEMPLATE_02) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN group by RN_TESTCYCL_ID having min(RN_EXECUTION_DATE) BETWEEN '{WeekStartDate}' and '{WeekEndDate}') b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed') and c.TS_USER_TEMPLATE_02 = '{currentApplication}' and c.TS_USER_TEMPLATE_01 = '{currentProgramInit}' group by d.RN_STATUS, c.TS_USER_TEMPLATE_02, c.TS_USER_TEMPLATE_01";
-            _table = RunSql(Sql);
-            var passedCount = 0;
-            var failedCount = 0;
-            if (_table != null)
+            var records = Db.DefectMetrics.Where(p =>
+                p.Application == application && p.Project == Project).ToList();
+
+            if (records.Count == 0 && application.Trim() != "")
             {
-                foreach (DataRow row in _table.Rows)
+                Db.DefectMetrics.Add(new DefectMetric
                 {
-                    if (row["RunStatus"].ToString() == "Passed")
-                    {
-                        if (recordWeek != null) recordWeek.TotalFirstTimePassed = Convert.ToInt32(row["AppCount"]);
-                        passedCount = Convert.ToInt32(row["AppCount"]);
-                    }
-
-                    if (row["RunStatus"].ToString() == "Failed")
-                    {
-                        if (recordWeek != null) recordWeek.TotalFirstTimeFailed = Convert.ToInt32(row["AppCount"]);
-                        failedCount = Convert.ToInt32(row["AppCount"]);
-                    }
-
-                    if (recordWeek != null) recordWeek.TotalFirstTimeTestInstances = failedCount + passedCount;
-
-                    if (failedCount + passedCount != 0)
-                    {
-                        var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
-                        if (recordWeek != null)
-                            recordWeek.PercentFirstTimeInstancesPassed = Convert.ToDecimal(passPercentage);
-
-                        var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
-                        if (recordWeek != null)
-                            recordWeek.PercentFirstTimeInstancesFailed = Convert.ToDecimal(failPercentage);
-                    }
-
-                    Db.SaveChanges();
-                }
+                    AgeBiWeek = 0,
+                    AgeOther = 0,
+                    AgeWeek = 0,
+                    Application = application,
+                    Project = Project
+                });
+                Db.SaveChanges();
             }
         }
 
-        // get the list of Re-run
-        private void UpdateReRunCounts(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication, string currentProgramInit)
-        {
-            Sql =
-                $"select t4.TS_USER_TEMPLATE_01 as ProgramInit, t4.TS_USER_TEMPLATE_02 as Application, Count(t4.TS_USER_TEMPLATE_02) as AppCount, t3.RN_STATUS as RunStatus from (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN where (RN_STATUS NOT IN ('Blocked','No Run','N/A', 'Not Completed') Or RN_DURATION > 0) group by RN_TESTCYCL_ID) t1, (select RN_TESTCYCL_ID, max(RN_RUN_ID) as MaxRunId from td.RUN group by RN_TESTCYCL_ID having max(RN_EXECUTION_DATE) BETWEEN '{WeekStartDate}' and '{WeekEndDate}') t2, (select * from td.RUN) t3, (select * from td.TEST) t4 where t1.RN_TESTCYCL_ID = t2.RN_TESTCYCL_ID and t1.MinRunId < t2.MaxRunId and t2.MaxRunId = t3.RN_RUN_ID and t4.TS_TEST_ID = t3.RN_TEST_ID and (t3.RN_STATUS NOT IN ('Blocked','No Run','N/A','Not Completed') Or t3.RN_DURATION > 0) and t4.TS_USER_TEMPLATE_02 = '{currentApplication}' and t4.TS_USER_TEMPLATE_01 = '{currentProgramInit}' group by t3.RN_STATUS, t4.TS_USER_TEMPLATE_02, t4.TS_USER_TEMPLATE_01";
-            _table = RunSql(Sql);
-            var passedCount = 0;
-            var failedCount = 0;
-            if (_table != null)
-            {
-                foreach (DataRow row in _table.Rows)
-                {
-                    if (row["RunStatus"].ToString() == "Passed")
-                    {
-                        if (recordWeek != null) recordWeek.ReTestPassedInstances = Convert.ToInt32(row["AppCount"]);
-                        passedCount = Convert.ToInt32(row["AppCount"]);
-                    }
+        //// Get the list of Test Instances that are passed and failed in a given time period. 
+        //// TODO: ignored blocked test run for this time. focused more on passed and failed
 
-                    if (row["RunStatus"].ToString() == "Failed")
-                    {
-                        if (recordWeek != null) recordWeek.ReTestFailedInstances = Convert.ToInt32(row["AppCount"]);
-                        failedCount = Convert.ToInt32(row["AppCount"]);
-                    }
+        //private void UpdateTestInstaceCounts(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication, string currentProgramInit)
+        //{
+        //    Sql =
+        //        $"select c.TS_USER_TEMPLATE_01 as ProgramInit, c.TS_USER_TEMPLATE_02 as Application, Count(c.TS_USER_TEMPLATE_02) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, max(RN_RUN_ID) as MaxRunId from td.RUN group by RN_TESTCYCL_ID having max(RN_EXECUTION_DATE) BETWEEN '{WeekStartDate}' and '{WeekEndDate}') b on a.RN_RUN_ID = b.MaxRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed') and c.TS_USER_TEMPLATE_02 = '{currentApplication}' and c.TS_USER_TEMPLATE_01 = '{currentProgramInit}' group by d.RN_STATUS, c.TS_USER_TEMPLATE_02, c.TS_USER_TEMPLATE_01";
+        //    _table = RunSql(Sql);
+        //    var passedCount = 0;
+        //    var failedCount = 0;
 
-                    if (recordWeek != null) recordWeek.TotalReTestInstances = failedCount + passedCount;
+        //    if (_table != null)
+        //    {
+        //        foreach (DataRow row in _table.Rows)
+        //        {
+        //            if (row["RunStatus"].ToString() == "Passed")
+        //            {
+        //                passedCount = Convert.ToInt32(row["AppCount"]);
+        //                if (recordWeek != null) recordWeek.TotalPassedInstances = Convert.ToInt32(row["AppCount"]);
+        //            }
 
-                    if (failedCount + passedCount != 0)
-                    {
-                        var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
-                        if (recordWeek != null)
-                            recordWeek.PercentageReTestInstancesPassed = Convert.ToDecimal(passPercentage);
+        //            if (row["RunStatus"].ToString() == "Failed")
+        //            {
+        //                failedCount = Convert.ToInt32(row["AppCount"]);
+        //                if (recordWeek != null) recordWeek.TotalFailedInstances = Convert.ToInt32(row["AppCount"]);
+        //            }
 
-                        var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
-                        if (recordWeek != null)
-                            recordWeek.PercentageReTestInstancesFailed = Convert.ToDecimal(failPercentage);
-                    }
+        //            if (recordWeek != null) recordWeek.TotalInstances = failedCount + passedCount;
 
-                    Db.SaveChanges();
-                }
-            }
-        }
+        //            if (failedCount + passedCount != 0)
+        //            {
+        //                var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
+        //                if (recordWeek != null)
+        //                    recordWeek.PercentageTotalInstancesPassed = Convert.ToDecimal(passPercentage);
+
+        //                var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
+        //                if (recordWeek != null)
+        //                    recordWeek.PercentageTotalInstancesFailed = Convert.ToDecimal(failPercentage);
+        //            }
+
+        //            Db.SaveChanges();
+        //        }
+        //    }
+
+        //}
+
+        //// Get the listf of First time passed and first time failed
+        //private void UpdateFirstTimeCounts(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication, string currentProgramInit)
+        //{
+        //    Sql =
+        //        $"select c.TS_USER_TEMPLATE_01 as ProgramInit, c.TS_USER_TEMPLATE_02 as Application, Count(c.TS_USER_TEMPLATE_02) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN group by RN_TESTCYCL_ID having min(RN_EXECUTION_DATE) BETWEEN '{WeekStartDate}' and '{WeekEndDate}') b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed') and c.TS_USER_TEMPLATE_02 = '{currentApplication}' and c.TS_USER_TEMPLATE_01 = '{currentProgramInit}' group by d.RN_STATUS, c.TS_USER_TEMPLATE_02, c.TS_USER_TEMPLATE_01";
+        //    _table = RunSql(Sql);
+        //    var passedCount = 0;
+        //    var failedCount = 0;
+        //    if (_table != null)
+        //    {
+        //        foreach (DataRow row in _table.Rows)
+        //        {
+        //            if (row["RunStatus"].ToString() == "Passed")
+        //            {
+        //                if (recordWeek != null) recordWeek.TotalFirstTimePassed = Convert.ToInt32(row["AppCount"]);
+        //                passedCount = Convert.ToInt32(row["AppCount"]);
+        //            }
+
+        //            if (row["RunStatus"].ToString() == "Failed")
+        //            {
+        //                if (recordWeek != null) recordWeek.TotalFirstTimeFailed = Convert.ToInt32(row["AppCount"]);
+        //                failedCount = Convert.ToInt32(row["AppCount"]);
+        //            }
+
+        //            if (recordWeek != null) recordWeek.TotalFirstTimeTestInstances = failedCount + passedCount;
+
+        //            if (failedCount + passedCount != 0)
+        //            {
+        //                var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
+        //                if (recordWeek != null)
+        //                    recordWeek.PercentFirstTimeInstancesPassed = Convert.ToDecimal(passPercentage);
+
+        //                var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
+        //                if (recordWeek != null)
+        //                    recordWeek.PercentFirstTimeInstancesFailed = Convert.ToDecimal(failPercentage);
+        //            }
+
+        //            Db.SaveChanges();
+        //        }
+        //    }
+        //}
+
+        //// get the list of Re-run
+        //private void UpdateReRunCounts(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication, string currentProgramInit)
+        //{
+        //    Sql =
+        //        $"select t4.TS_USER_TEMPLATE_01 as ProgramInit, t4.TS_USER_TEMPLATE_02 as Application, Count(t4.TS_USER_TEMPLATE_02) as AppCount, t3.RN_STATUS as RunStatus from (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN where (RN_STATUS NOT IN ('Blocked','No Run','N/A', 'Not Completed') Or RN_DURATION > 0) group by RN_TESTCYCL_ID) t1, (select RN_TESTCYCL_ID, max(RN_RUN_ID) as MaxRunId from td.RUN group by RN_TESTCYCL_ID having max(RN_EXECUTION_DATE) BETWEEN '{WeekStartDate}' and '{WeekEndDate}') t2, (select * from td.RUN) t3, (select * from td.TEST) t4 where t1.RN_TESTCYCL_ID = t2.RN_TESTCYCL_ID and t1.MinRunId < t2.MaxRunId and t2.MaxRunId = t3.RN_RUN_ID and t4.TS_TEST_ID = t3.RN_TEST_ID and (t3.RN_STATUS NOT IN ('Blocked','No Run','N/A','Not Completed') Or t3.RN_DURATION > 0) and t4.TS_USER_TEMPLATE_02 = '{currentApplication}' and t4.TS_USER_TEMPLATE_01 = '{currentProgramInit}' group by t3.RN_STATUS, t4.TS_USER_TEMPLATE_02, t4.TS_USER_TEMPLATE_01";
+        //    _table = RunSql(Sql);
+        //    var passedCount = 0;
+        //    var failedCount = 0;
+        //    if (_table != null)
+        //    {
+        //        foreach (DataRow row in _table.Rows)
+        //        {
+        //            if (row["RunStatus"].ToString() == "Passed")
+        //            {
+        //                if (recordWeek != null) recordWeek.ReTestPassedInstances = Convert.ToInt32(row["AppCount"]);
+        //                passedCount = Convert.ToInt32(row["AppCount"]);
+        //            }
+
+        //            if (row["RunStatus"].ToString() == "Failed")
+        //            {
+        //                if (recordWeek != null) recordWeek.ReTestFailedInstances = Convert.ToInt32(row["AppCount"]);
+        //                failedCount = Convert.ToInt32(row["AppCount"]);
+        //            }
+
+        //            if (recordWeek != null) recordWeek.TotalReTestInstances = failedCount + passedCount;
+
+        //            if (failedCount + passedCount != 0)
+        //            {
+        //                var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
+        //                if (recordWeek != null)
+        //                    recordWeek.PercentageReTestInstancesPassed = Convert.ToDecimal(passPercentage);
+
+        //                var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
+        //                if (recordWeek != null)
+        //                    recordWeek.PercentageReTestInstancesFailed = Convert.ToDecimal(failPercentage);
+        //            }
+
+        //            Db.SaveChanges();
+        //        }
+        //    }
+        //}
 
         public void UpdatedByApplciationProgramInit()
         {
@@ -173,18 +218,139 @@ namespace SWAMetrics.Lib
                     var currentProgramInit = row["ProgramInit"].ToString();
                     InitWeeklyApplicationProgramInitRecord(currentApplication, currentProgramInit);
 
-                    
+
                     WeeklyExecutionMetricsProgramInit recordWeek = Db.WeeklyExecutionMetricsProgramInits.SingleOrDefault(p =>
                         p.Application.Equals(currentApplication) && p.ProgramInitiative.Equals(currentProgramInit) && p.CalenderWeek == CalenderWeek && p.Project == Project);
 
                     // get total test instance counts in the period
-                    UpdateTestInstaceCounts(recordWeek, currentApplication, currentProgramInit);
+                    GetTotalRuns(recordWeek, currentApplication, currentProgramInit);
 
                     // get first time counts
-                    UpdateFirstTimeCounts(recordWeek, currentApplication, currentProgramInit);
+                    GetFirstRuns(recordWeek, currentApplication, currentProgramInit);
 
                     // get re-run counts
-                    UpdateReRunCounts(recordWeek, currentApplication, currentProgramInit);
+                    GetReRuns(recordWeek, currentApplication, currentProgramInit);
+                }
+            }
+        }
+
+        // get the list of first time runs - only passed and failed
+
+        private void GetFirstRuns(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication, string currentProgramInit)
+        {
+            Sql =
+                $"select c.TS_USER_TEMPLATE_01 as ProgramInit, c.TS_USER_TEMPLATE_02 as Application, Count(c.TS_USER_TEMPLATE_02) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN group by RN_TESTCYCL_ID having min(RN_EXECUTION_DATE) BETWEEN '{WeekStartDate}' and '{WeekEndDate}') b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed') and c.TS_USER_TEMPLATE_02 = '{currentApplication}' and c.TS_USER_TEMPLATE_01 = '{currentProgramInit}' group by d.RN_STATUS, c.TS_USER_TEMPLATE_02, c.TS_USER_TEMPLATE_01";
+            _table = RunSql(Sql);
+            var passedCount = 0;
+            var failedCount = 0;
+            if (_table != null)
+            {
+                foreach (DataRow row in _table.Rows)
+                {
+                    if (row["RunStatus"].ToString() == "Passed")
+                    {
+                        if (recordWeek != null) recordWeek.TotalFirstTimePassedRuns = Convert.ToInt32(row["AppCount"]);
+                        passedCount = Convert.ToInt32(row["AppCount"]);
+                    }
+
+                    if (row["RunStatus"].ToString() == "Failed")
+                    {
+                        if (recordWeek != null) recordWeek.TotalFirstTimeFailedRuns = Convert.ToInt32(row["AppCount"]);
+                        failedCount = Convert.ToInt32(row["AppCount"]);
+                    }
+
+                    if (recordWeek != null) recordWeek.TotalFirstTimeRuns = failedCount + passedCount;
+
+                    if (failedCount + passedCount != 0)
+                    {
+                        var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
+                        if (recordWeek != null)
+                            recordWeek.PercentFirstRunPassed = Convert.ToDecimal(passPercentage);
+
+                        var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
+                        if (recordWeek != null)
+                            recordWeek.PercentFirstRunFailed = Convert.ToDecimal(failPercentage);
+                    }
+
+                    Db.SaveChanges();
+                }
+            }
+        }
+
+        private void GetTotalRuns(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication, string currentProgramInit)
+        {
+            Sql =
+                $"select t2.TS_USER_TEMPLATE_01 as ProgramInit, t2.TS_USER_TEMPLATE_02 as Application, Count(t2.TS_USER_TEMPLATE_02) as AppCount, t1.RN_STATUS as RunStatus from td.TEST t2 inner join (select RN_RUN_ID, RN_TEST_ID, RN_STATUS from td.RUN where RN_EXECUTION_DATE BETWEEN '{WeekStartDate}' and '{WeekEndDate}' and RN_STATUS in ('Passed', 'Failed')) t1 on t2.TS_TEST_ID = t1.RN_TEST_ID where t2.TS_USER_TEMPLATE_02 = '{currentApplication}' and t2.TS_USER_TEMPLATE_01 = '{currentProgramInit}' group by t2.TS_USER_TEMPLATE_01, t2.TS_USER_TEMPLATE_02, t1.RN_STATUS";
+            _table = RunSql(Sql);
+            var passedCount = 0;
+            var failedCount = 0;
+
+            if (_table != null)
+            {
+                foreach (DataRow row in _table.Rows)
+                {
+                    if (row["RunStatus"].ToString() == "Passed")
+                    {
+                        passedCount = Convert.ToInt32(row["AppCount"]);
+                        if (recordWeek != null) recordWeek.TotalPassedRuns = Convert.ToInt32(row["AppCount"]);
+                    }
+
+                    if (row["RunStatus"].ToString() == "Failed")
+                    {
+                        failedCount = Convert.ToInt32(row["AppCount"]);
+                        if (recordWeek != null) recordWeek.TotalFailedRuns = Convert.ToInt32(row["AppCount"]);
+                    }
+
+                    if (recordWeek != null) recordWeek.TotalRuns = failedCount + passedCount;
+
+                    if (failedCount + passedCount != 0)
+                    {
+                        var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
+                        if (recordWeek != null)
+                            recordWeek.PercentageTotalRunsPassed = Convert.ToDecimal(passPercentage);
+
+                        var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
+                        if (recordWeek != null)
+                            recordWeek.PercentageTotalRunsFailed = Convert.ToDecimal(failPercentage);
+                    }
+
+                    Db.SaveChanges();
+                }
+            }
+
+        }
+
+        private void GetReRuns(WeeklyExecutionMetricsProgramInit recordWeek, string currentApplication,
+            string currentProgramInit)
+        {
+            foreach (var record in Db.WeeklyExecutionMetricsProgramInits.ToList())
+            {
+                int? totalReRuns = 0;
+                int? passedCount = 0;
+                int? failedCount = 0;
+
+                passedCount = record.TotalPassedRuns - record.TotalFirstTimePassedRuns;
+                record.TotalReRunPassed = passedCount;
+
+                failedCount = record.TotalFailedRuns - record.TotalFirstTimeFailedRuns;
+                record.TotalReRunFailed = failedCount;
+
+                totalReRuns = passedCount + failedCount;
+                record.TotalReRuns = totalReRuns;
+
+                if (totalReRuns != 0)
+                {
+                    if (passedCount != null)
+                    {
+                        var passPercentage = (double)passedCount * 100 / (totalReRuns);
+                        record.PercentageReRunPassed = Convert.ToDecimal(passPercentage);
+                    }
+
+                    if (failedCount != null)
+                    {
+                        var failPercentage = (double)failedCount * 100 / (totalReRuns);
+                        record.PercentageReRunFailed = Convert.ToDecimal(failPercentage);
+                    }
                 }
             }
         }
@@ -203,22 +369,22 @@ namespace SWAMetrics.Lib
                     WeekStartDate = WeekStartDate,
                     WeekEndDate = WeekEndDate,
                     CalenderWeek = CalenderWeek,
-                    PercentageReTestInstancesFailed = 0,
-                    PercentageReTestInstancesPassed = 0,
-                    PercentageTotalInstancesFailed = 0,
-                    PercentageTotalInstancesPassed = 0,
-                    PercentFirstTimeInstancesFailed = 0,
-                    PercentFirstTimeInstancesPassed = 0,
-                    ReTestFailedInstances = 0,
-                    ReTestPassedInstances = 0,
-                    TotalFailedInstances = 0,
-                    TotalFirstTimeFailed = 0,
-                    TotalFirstTimePassed = 0,
-                    TotalFirstTimeTestInstances = 0,
-                    TotalInstances = 0,
-                    TotalPassedInstances = 0,
-                    TotalReTestInstances = 0,
-                    ProgramInitiative = programinit
+                    ProgramInitiative = programinit,
+                    PercentFirstRunFailed = 0,
+                    PercentFirstRunPassed = 0,
+                    PercentageReRunFailed = 0,
+                    PercentageReRunPassed = 0,
+                    PercentageTotalRunsFailed = 0,
+                    PercentageTotalRunsPassed = 0,
+                    TotalFailedRuns = 0,
+                    TotalFirstTimeFailedRuns = 0,
+                    TotalFirstTimePassedRuns = 0,
+                    TotalFirstTimeRuns = 0,
+                    TotalPassedRuns = 0,
+                    TotalReRunFailed = 0,
+                    TotalReRunPassed = 0,
+                    TotalReRuns = 0,
+                    TotalRuns = 0
                 });
                 Db.SaveChanges();
             }
