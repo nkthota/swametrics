@@ -352,6 +352,11 @@ namespace SWAMetrics.Lib
                         record.PercentageReRunFailed = Convert.ToDecimal(failPercentage);
                     }
                 }
+                else
+                {
+                    record.PercentageReRunPassed = 0;
+                    record.PercentageReRunFailed = 0;
+                }
             }
         }
 
