@@ -2,6 +2,7 @@
 using SWAMetrics.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -33,6 +34,18 @@ namespace SWAMetrics.Controllers
         }
 
         public ActionResult FirstTimeFail()
+        {
+            ViewBag.LastUpdated = _db.DataRefreshes.OrderByDescending(p => p.ID).FirstOrDefault()?.LastUpdated;
+            return View();
+        }
+
+        public ActionResult ReRunFail()
+        {
+            ViewBag.LastUpdated = _db.DataRefreshes.OrderByDescending(p => p.ID).FirstOrDefault()?.LastUpdated;
+            return View();
+        }
+
+        public ActionResult ReRunPass()
         {
             ViewBag.LastUpdated = _db.DataRefreshes.OrderByDescending(p => p.ID).FirstOrDefault()?.LastUpdated;
             return View();
@@ -121,7 +134,7 @@ namespace SWAMetrics.Controllers
                 week = week.GetPreviousWeek();
             }
 
-            var appmatches = from t in _db.WeeklyExecutionMetrics
+            var appmatches = from t in _db.WeeklyExecutionMetricsProgramInits
                              where cwdataList.Contains(t.CalenderWeek)
                              select new
                              {
@@ -137,10 +150,107 @@ namespace SWAMetrics.Controllers
 
                 foreach (var wk in cwdataList)
                 {
-                    var mMatches = _db.WeeklyExecutionMetrics.Where(p => p.CalenderWeek == wk && p.Application == app.Application).ToList();
+                    var mMatches = _db.WeeklyExecutionMetricsProgramInits.Where(p => p.CalenderWeek == wk && p.Application == app.Application).ToList();
                     if (mMatches.Count != 0)
                     {
-                        weeksdata = weeksdata + mMatches[0].PercentFirstTimeInstancesPassed.ToString() + ",";
+                        decimal passpercent = 0;
+                        int counter = 0;
+                        decimal currentvalue = 0;
+                        foreach (var mMatch in mMatches)
+                        {
+                            if (mMatch.PercentFirstRunPassed != null && mMatch.PercentFirstRunPassed != 0)
+                            {
+                                passpercent = passpercent + (decimal)mMatch.PercentFirstRunPassed;
+                                counter = counter + 1;
+                            }
+                        }
+
+                        if (counter == 0)
+                        {
+                            currentvalue = (decimal) (passpercent);
+                        }
+                        else
+                        {
+                            currentvalue = (decimal)(passpercent / counter);
+                        }
+                        
+                        weeksdata = weeksdata + currentvalue.ToString(CultureInfo.InvariantCulture) + ",";
+                    }
+                    else
+                    {
+                        weeksdata = weeksdata + "0" + ",";
+                    }
+                }
+
+                weeksdata = weeksdata.Substring(0, weeksdata.Length - 1);
+                if (weeksdata != "0,0,0,0,0,0,0,0")
+                {
+                    weeksapplicationdata = weeksapplicationdata + "{\"name\":\"" + app.Application + "\",\"data\":[" + weeksdata + "]},";
+                }
+            }
+            weeksapplicationdata = "[" + weeksapplicationdata.Substring(0, weeksapplicationdata.Length - 1) + "]";
+            var json = "[{\"name\":\"Weeks\",\"data\":[" + string.Join(",", cwdata.ToArray()) +
+                        "]},{\"name\":\"FTPP\",\"data\":" + weeksapplicationdata + "}]";
+
+            return new JsonResult { Data = json, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult FetchRrp()
+        {
+            List<string> cwdata = new List<string>();
+            List<int> cwdataList = new List<int>();
+
+            DateTime start = DateTime.Now;
+            Week week = new Week(start);
+
+            for (int i = 0; i < 8; i++)
+            {
+                cwdata.Add("\"W" + week.WeekOfYear + "\"");
+                cwdataList.Add(week.WeekOfYear);
+                week = week.GetPreviousWeek();
+            }
+
+            var appmatches = from t in _db.WeeklyExecutionMetricsProgramInits
+                             where cwdataList.Contains(t.CalenderWeek)
+                             select new
+                             {
+                                 t.Application
+                             };
+            var apps = appmatches.Distinct().ToArray();
+
+            string weeksapplicationdata = string.Empty;
+
+            foreach (var app in apps)
+            {
+                string weeksdata = string.Empty;
+
+                foreach (var wk in cwdataList)
+                {
+                    var mMatches = _db.WeeklyExecutionMetricsProgramInits.Where(p => p.CalenderWeek == wk && p.Application == app.Application).ToList();
+                    if (mMatches.Count != 0)
+                    {
+                        decimal passpercent = 0;
+                        int counter = 0;
+                        decimal currentvalue = 0;
+                        foreach (var mMatch in mMatches)
+                        {
+                            if (mMatch.PercentageReRunPassed != null && mMatch.PercentageReRunPassed != 0)
+                            {
+                                passpercent = passpercent + (decimal)mMatch.PercentageReRunPassed;
+                                counter = counter + 1;
+                            }
+                        }
+
+                        if (counter == 0)
+                        {
+                            currentvalue = (decimal)(passpercent);
+                        }
+                        else
+                        {
+                            currentvalue = (decimal)(passpercent / counter);
+                        }
+
+                        weeksdata = weeksdata + currentvalue.ToString(CultureInfo.InvariantCulture) + ",";
                     }
                     else
                     {
@@ -176,7 +286,7 @@ namespace SWAMetrics.Controllers
                 week = week.GetPreviousWeek();
             }
 
-            var appmatches = from t in _db.WeeklyExecutionMetrics
+            var appmatches = from t in _db.WeeklyExecutionMetricsProgramInits
                              where cwdataList.Contains(t.CalenderWeek)
                              select new
                              {
@@ -192,10 +302,107 @@ namespace SWAMetrics.Controllers
 
                 foreach (var wk in cwdataList)
                 {
-                    var mMatches = _db.WeeklyExecutionMetrics.Where(p => p.CalenderWeek == wk && p.Application == app.Application).ToList();
+                    var mMatches = _db.WeeklyExecutionMetricsProgramInits.Where(p => p.CalenderWeek == wk && p.Application == app.Application).ToList();
                     if (mMatches.Count != 0)
                     {
-                        weeksdata = weeksdata + mMatches[0].PercentFirstTimeInstancesFailed.ToString() + ",";
+                        decimal failpercent = 0;
+                        int counter = 0;
+                        decimal currentvalue = 0;
+                        foreach (var mMatch in mMatches)
+                        {
+                            if (mMatch.PercentFirstRunFailed != null && mMatch.PercentFirstRunFailed != 0)
+                            {
+                                failpercent = failpercent + (decimal)mMatch.PercentFirstRunFailed;
+                                counter = counter + 1;
+                            }
+                        }
+
+                        if (counter == 0)
+                        {
+                            currentvalue = (decimal)(failpercent);
+                        }
+                        else
+                        {
+                            currentvalue = (decimal)(failpercent / counter);
+                        }
+
+                        weeksdata = weeksdata + currentvalue.ToString(CultureInfo.InvariantCulture) + ",";
+                    }
+                    else
+                    {
+                        weeksdata = weeksdata + "0" + ",";
+                    }
+                }
+
+                weeksdata = weeksdata.Substring(0, weeksdata.Length - 1);
+                if (weeksdata != "0,0,0,0,0,0,0,0")
+                {
+                    weeksapplicationdata = weeksapplicationdata + "{\"name\":\"" + app.Application + "\",\"data\":[" + weeksdata + "]},";
+                }
+            }
+            weeksapplicationdata = "[" + weeksapplicationdata.Substring(0, weeksapplicationdata.Length - 1) + "]";
+            var json = "[{\"name\":\"Weeks\",\"data\":[" + string.Join(",", cwdata.ToArray()) +
+                        "]},{\"name\":\"FTPP\",\"data\":" + weeksapplicationdata + "}]";
+
+            return new JsonResult { Data = json, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult FetchRrf()
+        {
+            List<string> cwdata = new List<string>();
+            List<int> cwdataList = new List<int>();
+
+            DateTime start = DateTime.Now;
+            Week week = new Week(start);
+
+            for (int i = 0; i < 8; i++)
+            {
+                cwdata.Add("\"W" + week.WeekOfYear + "\"");
+                cwdataList.Add(week.WeekOfYear);
+                week = week.GetPreviousWeek();
+            }
+
+            var appmatches = from t in _db.WeeklyExecutionMetricsProgramInits
+                             where cwdataList.Contains(t.CalenderWeek)
+                             select new
+                             {
+                                 t.Application
+                             };
+            var apps = appmatches.Distinct().ToArray();
+
+            string weeksapplicationdata = string.Empty;
+
+            foreach (var app in apps)
+            {
+                string weeksdata = string.Empty;
+
+                foreach (var wk in cwdataList)
+                {
+                    var mMatches = _db.WeeklyExecutionMetricsProgramInits.Where(p => p.CalenderWeek == wk && p.Application == app.Application).ToList();
+                    if (mMatches.Count != 0)
+                    {
+                        decimal failpercent = 0;
+                        int counter = 0;
+                        decimal currentvalue = 0;
+                        foreach (var mMatch in mMatches)
+                        {
+                            if (mMatch.PercentageReRunFailed != null && mMatch.PercentageReRunFailed != 0)
+                            {
+                                failpercent = failpercent + (decimal)mMatch.PercentageReRunFailed;
+                                counter = counter + 1;
+                            }
+                        }
+
+                        if (counter == 0)
+                        {
+                            currentvalue = (decimal)(failpercent);
+                        }
+                        else
+                        {
+                            currentvalue = (decimal)(failpercent / counter);
+                        }
+
+                        weeksdata = weeksdata + currentvalue.ToString(CultureInfo.InvariantCulture) + ",";
                     }
                     else
                     {

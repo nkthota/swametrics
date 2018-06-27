@@ -4,9 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*<div class="content">
+<div class="content">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="hpanel">
                 <div class="panel-body">
                     <div class="text-center">
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="hpanel">
                 <div class="panel-body">
                     <div class="text-center">
@@ -38,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="hpanel">
                 <div class="panel-body">
                     <div class="text-center">
@@ -47,9 +47,25 @@
                             <i class="pe-7s-repeat fa-5x"></i>
                         </div>
                         <p class="small">
-                            All test instances executed within a given period that are not part of the first time execution of test instance.
+                            All tests re-runs within a given period that are Failed.
                         </p>
-                        <a class="btn btn-warning btn-md" href="Dashboard/ReRun">Browse</a>
+                        <a class="btn btn-warning btn-md" href="Dashboard/ReRunFail" style="margin-top: 17px;">Browse</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h2 class="m-b-xs">Re-Run Pass Percentage</h2>
+                        <div class="m">
+                            <i class="pe-7s-star fa-5x"></i>
+                        </div>
+                        <p class="small">
+                            All tests re-runs within a given period that are Passed.
+                        </p>
+                        <a class="btn btn-warning btn-md" href="Dashboard/ReRunPass" style="margin-top: 17px;">Browse</a>
                     </div>
                 </div>
             </div>
@@ -97,4 +113,4 @@
             </div>
         </div>
     </div>
-</div>*@
+</div>

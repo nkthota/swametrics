@@ -8,9 +8,8 @@
 <div class="content">
     <div class="content animate-panel">
         <div class="row">
-            
             <div class="col-lg-12">
-                <div class="hpanel hgreen">
+                <div class="hpanel hred">
                     <div class="panel-heading hbuilt">
                         <div class="pull-right">
                             <a class="btn btn-default btn-xs" id="ftpshow">Show Series</a>
@@ -18,20 +17,20 @@
                             <a class="fullscreen"><i class="fa fa-expand"></i></a>
                             @*<a class="btn btn-default btn-xs" id="ftphow" data-toggle="modal" data-target="#metricinfo"><i class="fa fa-question"></i></a>*@
                         </div>
-                        First Time Pass Percentage
+                        ReRun Fail Percentage
                     </div>
                     <div class="panel-body">
                         <div id="ftpcontainer" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
                     </div>
-                    <div class="panel-footer">    
+                    <div class="panel-footer">
                         Last Updated On: @lastUpdated
                     </div>
                 </div>
             </div>
-            
         </div>
+        
         <div>  
-            @Html.Partial("Information")
+            @Html.Partial("Information")  
         </div>
     </div>
 </div>
@@ -49,7 +48,7 @@
 
     <script type="text/javascript">
         $('body').loadingModal({ text: 'Fetching data...', 'animation': 'wanderingCubes' });
-        $.getJSON('/Dashboard/FetchFtp', function (data) {
+        $.getJSON('/Dashboard/FetchRrf', function (data) {
             console.log(data);
             var obj = JSON.parse(data);
             console.log(obj[0].data.toString());
@@ -62,7 +61,7 @@
                 },
 
                 title: {
-                    text: 'First Time Pass Percentage By Application - 2018'
+                    text: 'Re-Run Fail Percentage By Application - 2018'
                 },
 
                 credits: {
@@ -71,10 +70,10 @@
 
                 yAxis: {
                     title: {
-                        text: 'First Time Pass Percentage %'
+                        text: 'First Time Fail Percentage %'
                     },
-                        max: 100,
-                        min:0
+                    max: 100,
+                    min: 0
                 },
                 xAxis: {
                     categories: obj[0].data
@@ -85,8 +84,8 @@
             });
 
             var chart = $('#ftpcontainer').highcharts(),
-            $button = $('#ftphide');
-            $button.click(function() {
+                $button = $('#ftphide');
+            $button.click(function () {
                 $(chart.series).each(function () {
                     this.setVisible(false, false);
                 });
@@ -94,8 +93,8 @@
             });
 
             $button = $('#ftpshow');
-            $button.click(function() {
-                $(chart.series).each(function(){
+            $button.click(function () {
+                $(chart.series).each(function () {
                     this.setVisible(true, false);
                 });
                 chart.redraw();

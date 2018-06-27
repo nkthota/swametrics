@@ -1574,6 +1574,8 @@
     <Content Include="Vendor\jquery-ui\composer.json" />
     <Content Include="Vendor\jquery-ui\package.json" />
     <Content Include="Vendor\jquery-ui\README.md" />
+    <Content Include="Views\Dashboard\ReRunFail.cshtml" />
+    <Content Include="Views\Dashboard\ReRunPass.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
