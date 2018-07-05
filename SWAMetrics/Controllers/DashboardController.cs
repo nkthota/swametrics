@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using SWAMetrics.Lib;
 
 namespace SWAMetrics.Controllers
 {
@@ -25,6 +26,16 @@ namespace SWAMetrics.Controllers
         public ActionResult CycleFirstTimePass()
         {
             return View();
+        }
+
+        public ActionResult ProjectMonthlyMetrics()
+        {
+            return View(_db.ProjectMonthlyExecutionMetrics.ToList());
+        }
+
+        public ActionResult LastProjectActivity()
+        {
+            return View(new LastProjectAccessed().GetLastAccessedDetails().ToList());
         }
 
         public ActionResult FirstTimePass()

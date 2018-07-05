@@ -182,6 +182,8 @@
     </Compile>
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Lib\Database.cs" />
+    <Compile Include="Lib\LastProjectAccessed.cs" />
+    <Compile Include="Lib\MonthlyProjectExecutionDetails.cs" />
     <Compile Include="Lib\WeeklyExecutionDetailsProgramInit.cs" />
     <Compile Include="Lib\WeeklyExecutionDetails.cs" />
     <Compile Include="Models\Cycle.cs">
@@ -209,6 +211,9 @@
       <DependentUpon>Metrics.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Project.cs">
+      <DependentUpon>Metrics.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProjectMonthlyExecutionMetric.cs">
       <DependentUpon>Metrics.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WeeklyExecutionMetric.cs">
@@ -1576,6 +1581,8 @@
     <Content Include="Vendor\jquery-ui\README.md" />
     <Content Include="Views\Dashboard\ReRunFail.cshtml" />
     <Content Include="Views\Dashboard\ReRunPass.cshtml" />
+    <Content Include="Views\Dashboard\ProjectMonthlyMetrics.cshtml" />
+    <Content Include="Views\Dashboard\LastProjectActivity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

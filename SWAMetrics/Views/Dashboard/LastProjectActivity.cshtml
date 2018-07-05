@@ -1,0 +1,116 @@
+﻿@model IEnumerable<SWAMetrics.Lib.LastActivity>
+
+@{
+    ViewBag.Title = "LastProjectActivity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel">
+                <div class="panel-heading hbuilt">
+                    <div class="panel-tools">
+                        <a class="fullscreen"><i class="fa fa-expand"></i></a>
+                        <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                        <a class="closebox"><i class="fa fa-times"></i></a>
+                    </div>
+                    ALM Projects - Last Accessed Details
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped" id="example">
+                            <thead>
+                            <tr class="font-extra-bold text-center">
+                                <th>Domain</th>
+                                <th>Project</th>
+                                <th>Active?</th>
+                                <th>Last Accessed</th>
+                                <th>Days From Now</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr class="font-extra-bold text-center">
+                                <th>Domain</th>
+                                <th>Project</th>
+                                <th>Active?</th>
+                                <th>Last Accessed</th>
+                                <th>Days From Now</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var proj in Model.ToList())
+                                {
+                                <tr>
+                                    <td>@proj.Domain</td>
+                                    <td>@proj.ProjectName</td>
+                                    <td>@proj.Active</td>
+                                    <td>@proj.LastAccessed</td>
+                                    <td>@proj.DaysFromNow</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="panel-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+    @Scripts.Render("~/bundles/datatablesPlugins/js")
+
+    <script>
+        $(document).ready(function () {
+            $('#example').dataTable({
+                dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                buttons: [
+                    { extend: 'copy', className: 'btn-sm' },
+                    { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                    { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                    { extend: 'print', className: 'btn-sm' }
+                ],
+                "pageLength": 10,
+                initComplete: function () {
+                    this.api().columns().every(function () {
+                        var column = this;
+                        
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                        
+                    });
+                }
+            });
+        });
+    </script>
+}
+

@@ -357,6 +357,8 @@ namespace SWAMetrics.Lib
                     record.PercentageReRunPassed = 0;
                     record.PercentageReRunFailed = 0;
                 }
+
+                Db.SaveChanges();
             }
         }
 
