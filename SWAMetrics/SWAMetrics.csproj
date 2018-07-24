@@ -183,6 +183,8 @@
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Lib\Database.cs" />
     <Compile Include="Lib\LastProjectAccessed.cs" />
+    <Compile Include="Lib\ProjectExecutionRelease.cs" />
+    <Compile Include="Lib\ProjectExecutionCycle.cs" />
     <Compile Include="Lib\MonthlyProjectExecutionDetails.cs" />
     <Compile Include="Lib\WeeklyExecutionDetailsProgramInit.cs" />
     <Compile Include="Lib\WeeklyExecutionDetails.cs" />
@@ -193,6 +195,9 @@
       <DependentUpon>Metrics.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DefectMetric.cs">
+      <DependentUpon>Metrics.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExecutionMetricsCycle.cs">
       <DependentUpon>Metrics.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Metrics.Context.cs">
@@ -217,9 +222,6 @@
       <DependentUpon>Metrics.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WeeklyExecutionMetric.cs">
-      <DependentUpon>Metrics.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\WeeklyExecutionMetricsDetailed.cs">
       <DependentUpon>Metrics.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WeeklyExecutionMetricsProgramInit.cs">
@@ -1583,6 +1585,7 @@
     <Content Include="Views\Dashboard\ReRunPass.cshtml" />
     <Content Include="Views\Dashboard\ProjectMonthlyMetrics.cshtml" />
     <Content Include="Views\Dashboard\LastProjectActivity.cshtml" />
+    <Content Include="Views\Dashboard\ProjectReleaseMetrics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -31,6 +31,42 @@
           <Property Name="AgeThreeMonth" Type="int" />
           <Property Name="AgeOther" Type="int" />
         </EntityType>
+        <EntityType Name="ExecutionMetricsCycle">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Project" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Release" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReleaseCycleId" Type="int" />
+          <Property Name="ReleaseCycle" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReleaseCycleStartDate" Type="date" />
+          <Property Name="ReleaseCycleEnddate" Type="date" />
+          <Property Name="Application" Type="nvarchar" MaxLength="1000" />
+          <Property Name="TotalTestInstances" Type="int" />
+          <Property Name="PassedTestInstances" Type="int" />
+          <Property Name="FailedTestInstances" Type="int" />
+          <Property Name="NotCompletedTestInstances" Type="int" />
+          <Property Name="BlockedTestInstances" Type="int" />
+          <Property Name="NoRunTestInstances" Type="int" />
+          <Property Name="PercentTotalInstancesPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentTotalInstancesFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="TotalFirstTimeRuns" Type="int" />
+          <Property Name="TotalFirstTimePassedRuns" Type="int" />
+          <Property Name="TotalFirstTimeFailedRuns" Type="int" />
+          <Property Name="TotalRuns" Type="int" />
+          <Property Name="TotalPassedRuns" Type="int" />
+          <Property Name="TotalFailedRuns" Type="int" />
+          <Property Name="TotalReRuns" Type="int" />
+          <Property Name="TotalReRunPassed" Type="int" />
+          <Property Name="TotalReRunFailed" Type="int" />
+          <Property Name="PercentFirstRunPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentFirstRunFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalRunsPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalRunsFailed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReRunPassed" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReRunFailed" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
         <EntityType Name="ProjectMonthlyExecutionMetrics">
           <Key>
             <PropertyRef Name="ID" />
@@ -90,24 +126,6 @@
           <Property Name="PercentageReTestInstancesPassed" Type="decimal" Precision="5" Scale="2" />
           <Property Name="PercentageReTestInstancesFailed" Type="decimal" Precision="5" Scale="2" />
         </EntityType>
-        <EntityType Name="WeeklyExecutionMetricsDetailed">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="WeekStartDate" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="WeekEndDate" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="CalenderWeek" Type="int" Nullable="false" />
-          <Property Name="Project" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Application" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="ProgramInitiative" Type="nvarchar" MaxLength="100" />
-          <Property Name="ReleaseCycle" Type="nvarchar" MaxLength="100" />
-          <Property Name="TestSet" Type="nvarchar" MaxLength="100" />
-          <Property Name="TestInstanceId" Type="int" Nullable="false" />
-          <Property Name="TestId" Type="int" Nullable="false" />
-          <Property Name="TestName" Type="nvarchar(max)" />
-          <Property Name="ExecutionDate" Type="date" />
-        </EntityType>
         <EntityType Name="WeeklyExecutionMetricsProgramInit">
           <Key>
             <PropertyRef Name="ID" />
@@ -139,10 +157,10 @@
           <EntitySet Name="Cycles" EntityType="Self.Cycles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DataRefresh" EntityType="Self.DataRefresh" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DefectMetrics" EntityType="Self.DefectMetrics" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExecutionMetricsCycle" EntityType="Self.ExecutionMetricsCycle" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectMonthlyExecutionMetrics" EntityType="Self.ProjectMonthlyExecutionMetrics" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WeeklyExecutionMetrics" EntityType="Self.WeeklyExecutionMetrics" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="WeeklyExecutionMetricsDetailed" EntityType="Self.WeeklyExecutionMetricsDetailed" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WeeklyExecutionMetricsProgramInit" EntityType="Self.WeeklyExecutionMetricsProgramInit" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -155,9 +173,9 @@
           <EntitySet Name="Cycles" EntityType="ls_dashboardModel.Cycle" />
           <EntitySet Name="DefectMetrics" EntityType="ls_dashboardModel.DefectMetric" />
           <EntitySet Name="WeeklyExecutionMetrics" EntityType="ls_dashboardModel.WeeklyExecutionMetric" />
-          <EntitySet Name="WeeklyExecutionMetricsDetaileds" EntityType="ls_dashboardModel.WeeklyExecutionMetricsDetailed" />
           <EntitySet Name="WeeklyExecutionMetricsProgramInits" EntityType="ls_dashboardModel.WeeklyExecutionMetricsProgramInit" />
           <EntitySet Name="ProjectMonthlyExecutionMetrics" EntityType="ls_dashboardModel.ProjectMonthlyExecutionMetric" />
+          <EntitySet Name="ExecutionMetricsCycles" EntityType="ls_dashboardModel.ExecutionMetricsCycle" />
         </EntityContainer>
         <EntityType Name="Project">
           <Key>
@@ -219,24 +237,6 @@
           <Property Name="PercentageReTestInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="PercentageReTestInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
         </EntityType>
-        <EntityType Name="WeeklyExecutionMetricsDetailed">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="WeekStartDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="WeekEndDate" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CalenderWeek" Type="Int32" Nullable="false" />
-          <Property Name="Project" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Application" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ProgramInitiative" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ReleaseCycle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TestSet" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TestInstanceId" Type="Int32" Nullable="false" />
-          <Property Name="TestId" Type="Int32" Nullable="false" />
-          <Property Name="TestName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ExecutionDate" Type="DateTime" Precision="0" />
-        </EntityType>
         <EntityType Name="WeeklyExecutionMetricsProgramInit">
           <Key>
             <PropertyRef Name="ID" />
@@ -288,6 +288,42 @@
           <Property Name="PercentageTotalRunsFailed" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="PercentageReRunPassed" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="PercentageReRunFailed" Type="Decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="ExecutionMetricsCycle">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Project" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Release" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReleaseCycle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReleaseCycleStartDate" Type="DateTime" Precision="0" />
+          <Property Name="ReleaseCycleEnddate" Type="DateTime" Precision="0" />
+          <Property Name="Application" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="TotalTestInstances" Type="Int32" />
+          <Property Name="PassedTestInstances" Type="Int32" />
+          <Property Name="FailedTestInstances" Type="Int32" />
+          <Property Name="NotCompletedTestInstances" Type="Int32" />
+          <Property Name="BlockedTestInstances" Type="Int32" />
+          <Property Name="NoRunTestInstances" Type="Int32" />
+          <Property Name="PercentTotalInstancesPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentTotalInstancesFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="TotalFirstTimeRuns" Type="Int32" />
+          <Property Name="TotalFirstTimePassedRuns" Type="Int32" />
+          <Property Name="TotalFirstTimeFailedRuns" Type="Int32" />
+          <Property Name="TotalRuns" Type="Int32" />
+          <Property Name="TotalPassedRuns" Type="Int32" />
+          <Property Name="TotalFailedRuns" Type="Int32" />
+          <Property Name="TotalReRuns" Type="Int32" />
+          <Property Name="TotalReRunPassed" Type="Int32" />
+          <Property Name="TotalReRunFailed" Type="Int32" />
+          <Property Name="PercentFirstRunPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentFirstRunFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalRunsPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageTotalRunsFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReRunPassed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="PercentageReRunFailed" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="ReleaseCycleId" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -360,25 +396,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="WeeklyExecutionMetricsDetaileds">
-            <EntityTypeMapping TypeName="ls_dashboardModel.WeeklyExecutionMetricsDetailed">
-              <MappingFragment StoreEntitySet="WeeklyExecutionMetricsDetailed">
-                <ScalarProperty Name="ExecutionDate" ColumnName="ExecutionDate" />
-                <ScalarProperty Name="TestName" ColumnName="TestName" />
-                <ScalarProperty Name="TestId" ColumnName="TestId" />
-                <ScalarProperty Name="TestInstanceId" ColumnName="TestInstanceId" />
-                <ScalarProperty Name="TestSet" ColumnName="TestSet" />
-                <ScalarProperty Name="ReleaseCycle" ColumnName="ReleaseCycle" />
-                <ScalarProperty Name="ProgramInitiative" ColumnName="ProgramInitiative" />
-                <ScalarProperty Name="Application" ColumnName="Application" />
-                <ScalarProperty Name="Project" ColumnName="Project" />
-                <ScalarProperty Name="CalenderWeek" ColumnName="CalenderWeek" />
-                <ScalarProperty Name="WeekEndDate" ColumnName="WeekEndDate" />
-                <ScalarProperty Name="WeekStartDate" ColumnName="WeekStartDate" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="WeeklyExecutionMetricsProgramInits">
             <EntityTypeMapping TypeName="ls_dashboardModel.WeeklyExecutionMetricsProgramInit">
               <MappingFragment StoreEntitySet="WeeklyExecutionMetricsProgramInit">
@@ -429,6 +446,43 @@
                 <ScalarProperty Name="MonthYear" ColumnName="MonthYear" />
                 <ScalarProperty Name="MonthEndDate" ColumnName="MonthEndDate" />
                 <ScalarProperty Name="MonthStartDate" ColumnName="MonthStartDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExecutionMetricsCycles">
+            <EntityTypeMapping TypeName="ls_dashboardModel.ExecutionMetricsCycle">
+              <MappingFragment StoreEntitySet="ExecutionMetricsCycle">
+                <ScalarProperty Name="ReleaseCycleId" ColumnName="ReleaseCycleId" />
+                <ScalarProperty Name="PercentageReRunFailed" ColumnName="PercentageReRunFailed" />
+                <ScalarProperty Name="PercentageReRunPassed" ColumnName="PercentageReRunPassed" />
+                <ScalarProperty Name="PercentageTotalRunsFailed" ColumnName="PercentageTotalRunsFailed" />
+                <ScalarProperty Name="PercentageTotalRunsPassed" ColumnName="PercentageTotalRunsPassed" />
+                <ScalarProperty Name="PercentFirstRunFailed" ColumnName="PercentFirstRunFailed" />
+                <ScalarProperty Name="PercentFirstRunPassed" ColumnName="PercentFirstRunPassed" />
+                <ScalarProperty Name="TotalReRunFailed" ColumnName="TotalReRunFailed" />
+                <ScalarProperty Name="TotalReRunPassed" ColumnName="TotalReRunPassed" />
+                <ScalarProperty Name="TotalReRuns" ColumnName="TotalReRuns" />
+                <ScalarProperty Name="TotalFailedRuns" ColumnName="TotalFailedRuns" />
+                <ScalarProperty Name="TotalPassedRuns" ColumnName="TotalPassedRuns" />
+                <ScalarProperty Name="TotalRuns" ColumnName="TotalRuns" />
+                <ScalarProperty Name="TotalFirstTimeFailedRuns" ColumnName="TotalFirstTimeFailedRuns" />
+                <ScalarProperty Name="TotalFirstTimePassedRuns" ColumnName="TotalFirstTimePassedRuns" />
+                <ScalarProperty Name="TotalFirstTimeRuns" ColumnName="TotalFirstTimeRuns" />
+                <ScalarProperty Name="PercentTotalInstancesFailed" ColumnName="PercentTotalInstancesFailed" />
+                <ScalarProperty Name="PercentTotalInstancesPassed" ColumnName="PercentTotalInstancesPassed" />
+                <ScalarProperty Name="NoRunTestInstances" ColumnName="NoRunTestInstances" />
+                <ScalarProperty Name="BlockedTestInstances" ColumnName="BlockedTestInstances" />
+                <ScalarProperty Name="NotCompletedTestInstances" ColumnName="NotCompletedTestInstances" />
+                <ScalarProperty Name="FailedTestInstances" ColumnName="FailedTestInstances" />
+                <ScalarProperty Name="PassedTestInstances" ColumnName="PassedTestInstances" />
+                <ScalarProperty Name="TotalTestInstances" ColumnName="TotalTestInstances" />
+                <ScalarProperty Name="Application" ColumnName="Application" />
+                <ScalarProperty Name="ReleaseCycleEnddate" ColumnName="ReleaseCycleEnddate" />
+                <ScalarProperty Name="ReleaseCycleStartDate" ColumnName="ReleaseCycleStartDate" />
+                <ScalarProperty Name="ReleaseCycle" ColumnName="ReleaseCycle" />
+                <ScalarProperty Name="Release" ColumnName="Release" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

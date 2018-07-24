@@ -77,24 +77,27 @@ namespace SWAMetrics.Lib
                     {
                         blockedCount = Convert.ToInt32(row["AppCount"]);                        
                     }
-
-                    if (recordMonth != null) recordMonth.TotalFirstTimeFailedRuns = failedCount + blockedCount;
-
-                    if (recordMonth != null) recordMonth.TotalFirstTimeRuns = failedCount + passedCount;
-
-                    if (failedCount + passedCount != 0)
-                    {
-                        var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
-                        if (recordMonth != null)
-                            recordMonth.PercentFirstRunPassed = Convert.ToDecimal(passPercentage);
-
-                        var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
-                        if (recordMonth != null)
-                            recordMonth.PercentFirstRunFailed = Convert.ToDecimal(failPercentage);
-                    }
-
-                    Db.SaveChanges();
+                    
                 }
+
+                Db.SaveChanges();
+
+                if (recordMonth != null) recordMonth.TotalFirstTimeFailedRuns = failedCount + blockedCount;
+
+                if (recordMonth != null) recordMonth.TotalFirstTimeRuns = blockedCount + failedCount + passedCount;
+
+                if (failedCount + passedCount + blockedCount != 0)
+                {
+                    var passPercentage = (double)passedCount * 100 / (failedCount + blockedCount + passedCount);
+                    if (recordMonth != null)
+                        recordMonth.PercentFirstRunPassed = Convert.ToDecimal(passPercentage);
+
+                    var failPercentage = (double)(failedCount + blockedCount) * 100 / (failedCount + blockedCount + passedCount);
+                    if (recordMonth != null)
+                        recordMonth.PercentFirstRunFailed = Convert.ToDecimal(failPercentage);
+                }
+
+                Db.SaveChanges();
             }
         }
 
@@ -129,15 +132,15 @@ namespace SWAMetrics.Lib
 
                     if (recordMonth != null) recordMonth.TotalFailedRuns = failedCount + blockedCount;
 
-                    if (recordMonth != null) recordMonth.TotalRuns = failedCount + passedCount;
+                    if (recordMonth != null) recordMonth.TotalRuns = failedCount + passedCount + blockedCount;
 
-                    if (failedCount + passedCount != 0)
+                    if (failedCount + passedCount + blockedCount != 0)
                     {
-                        var passPercentage = (double)passedCount * 100 / (failedCount + passedCount);
+                        var passPercentage = (double)passedCount * 100 / (failedCount + passedCount + blockedCount);
                         if (recordMonth != null)
                             recordMonth.PercentageTotalRunsPassed = Convert.ToDecimal(passPercentage);
 
-                        var failPercentage = (double)failedCount * 100 / (failedCount + passedCount);
+                        var failPercentage = (double)(failedCount + blockedCount) * 100 / (failedCount + passedCount + blockedCount);
                         if (recordMonth != null)
                             recordMonth.PercentageTotalRunsFailed = Convert.ToDecimal(failPercentage);
                     }

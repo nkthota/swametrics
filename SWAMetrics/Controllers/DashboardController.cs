@@ -33,6 +33,11 @@ namespace SWAMetrics.Controllers
             return View(_db.ProjectMonthlyExecutionMetrics.ToList());
         }
 
+        public ActionResult ProjectReleaseMetrics()
+        {
+            return View(_db.ExecutionMetricsCycles.ToList());
+        }
+
         public ActionResult LastProjectActivity()
         {
             return View(new LastProjectAccessed().GetLastAccessedDetails().ToList());
@@ -487,6 +492,13 @@ namespace SWAMetrics.Controllers
                         "]},{\"name\":\"FTPP\",\"data\":" + weeksapplicationdata + "}]";
 
             return new JsonResult { Data = json, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult GetReleaseData(string project, string release)
+        {
+            ProjectExecutionRelease projectExecutionRelease = new ProjectExecutionRelease(project, release);
+            var obj = Newtonsoft.Json.JsonConvert.SerializeObject(projectExecutionRelease.GetReleaseDetails(release));
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
     }
 

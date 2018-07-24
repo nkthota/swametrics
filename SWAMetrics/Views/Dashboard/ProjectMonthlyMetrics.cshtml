@@ -40,45 +40,58 @@
 
                                 foreach (var proj in projectsList)
                                 {
-                                    <tr>
-                                        <td class="font-extra-bold text-justify">@proj.Project.ToUpper()</td>
+                                <tr>
+                                    <td class="font-extra-bold text-justify">@proj.Project.ToUpper()</td>
 
-                                        @foreach (var mony in @monthList)
+                                    @foreach (var mony in @monthList)
+                                    {
+
+                                        if (@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed > 90)
                                         {
-
-                                            if (@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed > 90)
-                                            {
-                                                <td class="text-white text-center btn-success font-extra-bold">
+                                            <td class="text-white text-center btn-success font-extra-bold">
+                                                <div class="row">
+                                                    <span>@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed</span>
+                                                </div>
+                                                <div class="row">
                                                     <div class="row">
-                                                        <span>@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed</span>
+                                                        <span style="color: black;">(@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).TotalFirstTimeRuns)</span>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="row">
-                                                            <span style="color: black;">(@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).TotalFirstTimePassedRuns)</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else if (@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed < 90 && @Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed > 0)
-                                            {
-                                                <td class="text-white text-center btn-danger font-extra-bold">
-                                                    <div class="row">
-                                                        <span>@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed</span>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="row">
-                                                            <span style="color: black;">(@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).TotalFirstTimePassedRuns)</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td class="text-center font-extra-bold">NA</td>
-                                            }
+                                                </div>
+                                            </td>
                                         }
+                                        else if (@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed < 90 && @Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed > 80)
+                                        {
+                                            <td class="text-white text-center btn-warning font-extra-bold">
+                                                <div class="row">
+                                                    <span>@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed</span>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="row">
+                                                        <span style="color: black;">(@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).TotalFirstTimeRuns)</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        }
+                                        else if (@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed < 80 && @Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed > 0)
+                                        {
+                                            <td class="text-white text-center btn-danger font-extra-bold">
+                                                <div class="row">
+                                                    <span>@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentFirstRunPassed</span>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="row">
+                                                        <span style="color: black;">(@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).TotalFirstTimeRuns)</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center font-extra-bold">NA</td>
+                                        }
+                                    }
 
-                                    </tr>
+                                </tr>
                                 }
                             }
                             </tbody>
@@ -134,6 +147,19 @@
                                         if (@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentageReRunPassed > 90)
                                         {
                                             <td class="text-white text-center btn-success font-extra-bold">
+                                                <div class="row">
+                                                    <span>@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentageReRunPassed</span>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="row">
+                                                        <span style="color: black;">(@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).TotalReRuns)</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        }
+                                        else if (@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentageReRunPassed < 90 && @Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentageReRunPassed > 80)
+                                        {
+                                            <td class="text-white text-center btn-warning font-extra-bold">
                                                 <div class="row">
                                                     <span>@Model.FirstOrDefault(p => p.Project == proj.Project && p.MonthYear == @mony.MonthYear).PercentageReRunPassed</span>
                                                 </div>

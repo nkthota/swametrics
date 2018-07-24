@@ -30,8 +30,8 @@ namespace SWAMetrics.Models
         public virtual DbSet<Cycle> Cycles { get; set; }
         public virtual DbSet<DefectMetric> DefectMetrics { get; set; }
         public virtual DbSet<WeeklyExecutionMetric> WeeklyExecutionMetrics { get; set; }
-        public virtual DbSet<WeeklyExecutionMetricsDetailed> WeeklyExecutionMetricsDetaileds { get; set; }
         public virtual DbSet<WeeklyExecutionMetricsProgramInit> WeeklyExecutionMetricsProgramInits { get; set; }
         public virtual DbSet<ProjectMonthlyExecutionMetric> ProjectMonthlyExecutionMetrics { get; set; }
+        public virtual DbSet<ExecutionMetricsCycle> ExecutionMetricsCycles { get; set; }
     }
 }

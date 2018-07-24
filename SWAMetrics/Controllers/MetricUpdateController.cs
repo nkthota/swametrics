@@ -113,6 +113,20 @@ namespace SWAMetrics.Controllers
             //_db.SaveChanges();
 
             return View("Update");
+        }   
+
+        public ViewResult UpdateReleaseMetrics(int? id)
+        {
+            foreach (var project in _db.Projects.ToList())
+            {
+                ProjectExecutionCycle monthlyUpdates =
+                    new ProjectExecutionCycle(project.ProjectName, project.DatabaseName)
+                    {
+                    };
+                monthlyUpdates.GetProjectCycles();
+            }
+            new ProjectExecutionCycle().UpdateNumbers();
+            return View("Update");
         }
     }
 
