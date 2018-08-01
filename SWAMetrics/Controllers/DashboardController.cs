@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using SWAMetrics.Lib;
+using Newtonsoft.Json;
 
 namespace SWAMetrics.Controllers
 {
@@ -500,6 +501,59 @@ namespace SWAMetrics.Controllers
             var obj = Newtonsoft.Json.JsonConvert.SerializeObject(projectExecutionRelease.GetReleaseDetails(release));
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
+
+        public string TemplateProjects()
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetTemplateProjects());
+        }
+
+        public string ProjectReleases(string project)
+        {
+            if(project.Contains(","))
+            {
+                List<string> releases = new List<string>();
+                string[] projects = project.Split(',');
+                Pillar pillar = new Pillar();
+                foreach(var proj in projects)
+                {
+                    List<string> currentReleases =  pillar.GetActiveReleases(proj);
+                    foreach(var rel in currentReleases)
+                    {
+                        if(!releases.Contains(rel))
+                        {
+                            releases.Add(rel);
+                        }
+                    }
+                }
+
+                return string.Join(",", releases);
+            }
+            else
+            {
+                return string.Join(",", new Pillar().GetActiveReleases(project));
+            }
+        }
+
+        public string ApplicationFTP(string project, string release)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationFTP(project, release));
+        }
+
+        public string ApplicationRuns(string project, string release)   
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalRuns(project, release));
+        }
+
+        public string ApplicationInstances(string project, string release)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalInstances(project, release));
+        }
+
+        public string ApplicationTotalDefects(string project, string release, string application)   
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalDefects(project, release, application));
+        }
+
     }
 
     public class FirstTimePassed

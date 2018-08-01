@@ -172,6 +172,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ApplicationsController.cs" />
     <Compile Include="Controllers\CyclesController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\MainController.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Lib\Database.cs" />
     <Compile Include="Lib\LastProjectAccessed.cs" />
+    <Compile Include="Lib\PillarApplication.cs" />
     <Compile Include="Lib\ProjectExecutionRelease.cs" />
     <Compile Include="Lib\ProjectExecutionCycle.cs" />
     <Compile Include="Lib\MonthlyProjectExecutionDetails.cs" />
@@ -1591,6 +1593,8 @@
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
     <Folder Include="Vendor\pdfmake\libs\FileSaver.js\" />
+    <Folder Include="Views\Applications\" />
+    <Folder Include="Views\PillarApplication\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

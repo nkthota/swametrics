@@ -15,8 +15,8 @@ namespace SWAMetrics
 
             routes.MapRoute(
                 name: "DashboardRelease",
-                url: "{Dashboard}/{GetReleaseData}/{project}/{release}",
-                defaults: new { controller = "Dashboard", action = "GetReleaseData", project = UrlParameter.Optional, release = UrlParameter.Optional}
+                url: "{Dashboard}/{action}/{project}/{release}/{application}",
+                defaults: new { controller = "Dashboard", action = "GetReleaseData", project = UrlParameter.Optional, release = UrlParameter.Optional, application = UrlParameter.Optional}
             );
 
             routes.MapRoute(
