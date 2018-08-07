@@ -549,12 +549,93 @@ namespace SWAMetrics.Controllers
             return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalInstances(project, release));
         }
 
+        // Defects
+
         public string ApplicationTotalDefects(string project, string release, string application)   
         {
             return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalDefects(project, release, application));
         }
 
-    }
+        public string ApplicationTotalOpenCriticalDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalOpenCriticalDefects(project, release, application));
+        }
+
+        public string ApplicationTotalAvgAgingOpenCriticalDefects(string project, string release, string application)   
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalAvgAgingOpenCriticalDefects(project, release, application));
+        }
+
+        public string ApplicationTotalOpenMajorDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalOpenMajorDefects(project, release, application));
+        }
+
+        public string ApplicationTotalAvgAgingOpenMajorDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalAvgAgingOpenMajorDefects(project, release, application));
+        }
+
+        public string ApplicationTotalOpenMinorDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalOpenMinorDefects(project, release, application));
+        }
+
+        public string ApplicationTotalAvgAgingOpenMinorDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalAvgAgingOpenMinorDefects(project, release, application));
+        }
+
+        public string ApplicationTotalOpenTrivialDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalOpenTrivialDefects(project, release, application));
+        }
+
+        public string ApplicationTotalAvgAgingOpenTrivialDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationTotalAvgAgingOpenTrivialDefects(project, release, application));
+        }
+
+        public string ApplicationNewDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationNewDefects(project, release, application));
+        }
+
+        public string ApplicationAssignedDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationAssignedDefects(project, release, application));
+        }
+
+        public string ApplicationReadyToDeployDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationReadyToDeployDefects(project, release, application));
+        }
+
+        public string ApplicationClosedDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationClosedDefects(project, release, application));
+        }
+
+        public string ApplicationAvgAgeOpenDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationAvgAgeOpenDefects(project, release, application));
+        }
+
+        public string ApplicationClosedAgingDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationClosedAgingDefects(project, release, application));
+        }
+
+        public string ApplicationCriticalClosedAgingDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationCriticalClosedAgingDefects(project, release, application));
+        }
+
+        public string ApplicationMajorClosedAgingDefects(string project, string release, string application)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetApplicationMajorClosedAgingDefects(project, release, application));
+        }
+    }   
 
     public class FirstTimePassed
     {
