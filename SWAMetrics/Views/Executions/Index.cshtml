@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="row">
+        <div>
+            <h2 style="font-weight: bold;">
+                ALM Execution Metrics
+            </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="hpanel horange">
+                <div class="panel-heading">
+                    <div class="panel-tools">
+                        <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                        <a class="closebox"><i class="fa fa-times"></i></a>
+                    </div>
+                    Filter
+                </div>
+                <div class="panel-body">
+                    
+                    <div class="row">
+
+                        <div class="col-lg-4">
+                            <h5>ALM Projets</h5>
+                            <select class="js-example-basic-multiple" multiple="multiple" style="width: 100%" id="alm_projects"></select>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <h5>Release Cycles</h5>
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <select class="js-example-basic-multiple" multiple="multiple" style="width: 100%" id="release_cycles" disabled></select>
+                                </div>
+                                <div class="col-lg-2" style="padding: 0; margin-left: -4%;">
+                                    <a class="btn btn-default" id="cycle_update">
+                                        <i class="fa fa-refresh"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-4">
+                            <h5>Applications</h5>
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <select class="js-example-basic-multiple" multiple="multiple" style="width: 100%" id="applications" disabled></select>
+                                </div>
+                                <div class="col-lg-2" style="padding: 0; margin-left: -4%;">
+                                    <a class="btn btn-default">
+                                        <i class="fa fa-refresh"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/select2/css")
+    <style>
+
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/moment/js")
+    @Scripts.Render("~/bundles/select2/js")
+
+    <script type="text/javascript">
+
+        $('#cycle_update').click(function() {
+            console.log();
+            for (var i in $('#alm_projects').select2('data')) {
+                console.log($('#alm_projects').select2('data')[i].id);
+            }
+
+        });
+
+        $(function() {
+            $('.js-example-basic-multiple').select2();
+            $.getJSON("/Executions/GetProjects",
+                function(data) {
+                    console.log(data);
+                    for (var i in data) {
+                        var id = data[i].id;
+                        var name = data[i].text;
+                        var newOption = new Option(data[i].text, data[i].id, false, false);
+                        $('#alm_projects').append(newOption).trigger('change');
+                    }
+                });
+        });
+
+
+    </script>
+}

@@ -1,0 +1,186 @@
+﻿Dim objIE, strDefectList, strTestInstanceSelectionList
+
+  If ActionName = "Template_TestLab_Link" Then
+     cTestInstance_BulkLinkDefects("Link Defects")
+     ShowProgressbarAdd "Please wait..."
+  End If
+  If ActionName = "Template_TestLab_Unlink" Then
+      cTestInstance_BulkLinkDefects("UnLink Defects")
+      ShowProgressbarRemove "Please wait..."
+  End If
+
+Template_TestLab_Link , Link multiple defects to test instances, Template_TestLab_Link
+Template_TestLab_Unlink , Unlink multiple defects to test instances , Template_TestLab_Unlink
+
+
+Sub Wait (sec)
+    Dim temp
+    temp=timer
+    do while timer-temp<sec
+    loop
+End Sub
+
+Sub IEWait(IE)
+    Do
+        Wait(1)
+    Loop While IE.ReadyState < 4 Or IE.Busy
+End Sub
+
+Sub RemoveLink()
+    On Error Resume Next
+    If strDefectList <> "" And strTestInstanceSelectionList <> "" Then
+       Set com = TDConnection.Command
+       com.CommandText = "select LN_LINK_ID,LN_ENTITY_ID from LINK where LN_ENTITY_TYPE='TESTCYCL' and LN_ENTITY_ID IN (" & strTestInstanceSelectionList & ") and LN_BUG_ID IN (" & strDefectList & ")"
+       Set RecSet = com.Execute
+
+       For i=1 to RecSet.RecordCount
+           intTestInstanceId = RecSet.FieldValue(1)
+           intLinkId = RecSet.FieldValue(0)
+           TDConnection.TestSetFactory.Item(TestSet_Fields.Field("CY_CYCLE_ID").Value).TSTestFactory.Item(intTestInstanceId).BugLinkFactory.RemoveItem(intLinkId)
+           RecSet.Next
+       Next
+    End If
+    On Error GOTO 0
+End Sub
+
+Sub AddLink()
+    If strDefectList <> "" And strTestInstanceSelectionList <> "" Then
+       On Error Resume Next
+       arrTestInst = Split(strTestInstanceSelectionList, ",")
+       For intTI = 0 to Ubound(arrTestInst)
+           If arrTestInst(intTI) <> "" Then
+              If Instr(1, strDefectList , ",") > 0 Then
+                 arrBugList = Split(strDefectList, ",")
+                 For intBug = 0 to Ubound(arrBugList)
+                     TDConnection.TestSetFactory.Item(TestSet_Fields.Field("CY_CYCLE_ID").Value).TSTestFactory.Item(arrTestInst(intTI)).BugLinkFactory.AddItem(arrBugList(intBug))
+                 Next
+              Else
+                 TDConnection.TestSetFactory.Item(TestSet_Fields.Field("CY_CYCLE_ID").Value).TSTestFactory.Item(arrTestInst(intTI)).BugLinkFactory.AddItem(strDefectList)
+              End If
+           End If
+       Next
+    End If
+End Sub
+
+Sub ShowProgressbarAdd(Message)
+    objIE.Document.Body.innerHTML = "<div class='container'><div class='row' style='margin:100px;'><div class='row' style='margin-top:100px;'><div class='col-md-8'><div class='progress progress-striped active'> <div class='progress-bar progress-bar-warning' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'>" & Message & "</div> </div> </div> </div> </div> </div>"
+    AddLink
+    objIE.Quit
+End Sub
+
+Sub ShowProgressbarRemove(Message)
+    objIE.Document.Body.innerHTML = "<div class='container'><div class='row' style='margin:100px;'><div class='row' style='margin-top:100px;'><div class='col-md-8'><div class='progress progress-striped active'> <div class='progress-bar progress-bar-warning' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'>" & Message & "</div> </div> </div> </div> </div> </div>"
+    RemoveLink
+    objIE.Quit
+End Sub
+
+Function cTestInstance_BulkLinkDefects(strButtonDisplayText)
+     ' Get screen resolution to center the ie full window display
+     Set objWMIService = GetObject("Winmgmts:\\.\root\cimv2")
+     Set colItems = objWMIService.ExecQuery("Select * From Win32_DesktopMonitor where DeviceID = 'DesktopMonitor1'",,0)
+     For Each objItem in colItems
+       intHorizontal = objItem.ScreenWidth
+       intVertical = objItem.ScreenHeight
+     Next
+     Set colItems = Nothing
+     Set objWMIService = Nothing
+
+     ' Create IE instace to display content and wait for user input
+     Set objShell = CreateObject("Wscript.Shell")
+     Set objIE = CreateObject("InternetExplorer.Application")
+
+     ' IE window configuration for user input
+     objIE.Navigate("about:blank")
+     objIE.FullScreen=True
+     objIE.TheaterMode=true
+     objIE.TheaterMode=false
+     objIE.Width = 800
+     objIE.Height = 600
+     objIE.Left = (intHorizontal - objIE.Width) \ 2
+     objIE.Top = (intVertical - objIE.Height) \ 2
+     objIE.Document.Body.Style.overflow = "auto"
+     objIE.Document.parentwindow.Focus
+
+     Set objDoc = objIE.Document.Body
+
+     ' Add custom css
+     set ss = objIE.document.createElement("style")
+     ss.setAttribute "type", "text/css"
+     ss.styleSheet.cssText = "table, th, td { word-wrap: break-word; font-size:12px;} body {font-family:'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:10px;} .fixed-panel { min-height: 380; max-height: 380; overflow-y: scroll; }"
+     set hh = objIE.Document.getElementsByTagName("head")(0)
+     hh.appendChild ss
+
+     ' Add bootsrap support
+     set link = objIE.document.createElement("link")
+     link.type = "text/css"
+     link.rel = "stylesheet"
+     hh.appendChild link
+     link.href = "https://bootswatch.com/3/slate/bootstrap.min.css"
+
+     set link = objIE.document.createElement("link")
+     link.type = "text/css"
+     link.rel = "stylesheet"
+     hh.appendChild link
+     link.href = "https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"
+
+     set dt = objIE.document.createElement("script")
+     dt.src = "https://code.jquery.com/jquery-3.3.1.js"
+     set hh = objIE.document.getElementsByTagName("head")(0)
+     hh.appendChild(dt)
+
+     set dt = objIE.document.createElement("script")
+     dt.src = "https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"
+     set hh = objIE.document.getElementsByTagName("head")(0)
+     hh.appendChild(dt)
+
+     set ss = objIE.document.createElement("script")
+     scr = "function myFunction() { var input, filter, table, tr, td, i; input = document.getElementById('myInput'); filter = input.value.toUpperCase(); table = document.getElementById('example'); tr = table.getElementsByTagName('tr'); for (i = 0; i < tr.length; i++) { if (tr[i].innerHTML.toUpperCase().indexOf(filter) > -1) { tr[i].style.display = ''; } else { tr [i].style.display = 'none'; } } } function selectall(){ checkboxes = document.getElementsByName('TInstance'); for(var i=0, n=checkboxes.length;i<n;i++) {checkboxes[i].checked = true;}} function deselectall(){ checkboxes = document.getElementsByName('TInstance'); for(var i=0, n=checkboxes.length;i<n;i++) {checkboxes[i].checked = false;}}"
+     ss.text = scr
+     set hh = objIE.document.getElementsByTagName("head")(0)
+     hh.appendChild(ss)
+
+     'strHTML = ShowProgressbar("Please Wait. Loading Test Instance Names...")
+
+     strHTML = "<div class='container'><div class='row'><div class='panel panel-default'> <div class='panel-heading'> <h4> Test Instance Selection </h4> <div class='btn-group'><input class='btn btn-success' type='submit' value='" & strButtonDisplayText & "' OnClick='VBScript:OK.Value=1' /><INPUT class='btn btn-primary' TYPE='hidden' ID='OK' NAME='OK' VALUE='0'/><input class='btn btn-danger' type='submit' value='Cancel' OnClick='VBScript:Cancel.Value=1'/><INPUT TYPE='hidden' ID='Cancel' NAME='Cancel' VALUE='0'/></div><div class='form-group' style='padding:5px;'> <label for='usr'>" & strButtonDisplayText & ":</label> <input type='text' class='form-control' id='bugs' placeholder='Example: 234,567,87'></div></div> <div class='panel-body fixed-panel'><div class='row'><div class='btn-group'> <button type='button' class='btn btn-primary' onclick='selectall()'>All</button> <button type='button' class='btn btn-primary' onclick='deselectall()'>None</button><input type='text' class='form-control' id='myInput' onkeyup='myFunction()' placeholder='Search for status, test names..' title='Type in a search word'> </div></div><table id ='example' class='table table-striped table-bordered'> <thead> <tr> <th class='col-xs-2'>Selection</th><th class='col-xs-2'>Status</th><th class='col-xs-8'>Name</th> </tr> </thead> <tbody>"
+     strTestInstanceNames = ""
+
+     Set oTestSet = TDConnection.TestSetFactory.Item(TestSet_Fields.Field("CY_CYCLE_ID").Value )
+     Set oTestSetTest = oTestSet.TSTestFactory
+     Set allTests = oTestSetTest.NewList("")
+
+     For each oTestInstance in allTests
+       strTestInstanceNames = strTestInstanceNames & "<tr> <td class='col-md-2'><input type='checkbox' name='TInstance' value='" & oTestInstance.Id & "'></td><td class='col-md-2'>" & oTestInstance.Status & "</td><td class='col-md-8'>"& oTestInstance.Name & "</td></tr>"
+     Next
+
+     objDoc.InnerHTML = strHTML & strTestInstanceNames & "</tbody> </table></div> </div> </div> </div>"
+
+     IEWait objIE
+     objIE.Visible = True
+     objIE.StatusBar = False
+
+     strTestInstanceSelectionList = ""
+     strDefectList = ""
+
+     On Error Resume Next
+
+     Do While (Trim(objIE.Document.All.OK.Value) = 0 Or Trim(objIE.Document.All.Cancel.Value) = 0)
+
+     If Trim(objIE.Document.All.Cancel.Value) = 1 Then Exit Do
+       If Trim(objIE.Document.All.OK.Value) = 1 Then
+           For Each cb In objIE.Document.All.TInstance
+               If cb.Checked Then
+                  strTestInstanceSelectionList = strTestInstanceSelectionList & cb.Value & ","
+               End If
+           Next
+           strTestInstanceSelectionList = Left(strTestInstanceSelectionList, Len(strTestInstanceSelectionList) - 1)
+           strDefectList = objIE.Document.GetElementById("bugs").Value
+           Exit Do
+       End If
+     Loop
+     cTestInstance_BulkLinkDefects = strDefectList & "::-::" & strTestInstanceSelectionList
+
+     'objIE.Quit: Set objIE = Nothing
+     On Error GoTo 0
+
+
+End Function

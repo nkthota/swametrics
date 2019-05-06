@@ -51,7 +51,8 @@ namespace SWAMetrics.Controllers
         {
             //DateTime start = new DateTime(DateTime.Today.Year, 1, 1);
             //DateTime start = new DateTime(DateTime.Today.Year, 6, 1);
-            //DateTime end = start.AddYears(1);
+            //DateTime end = start.AddYears(1);                       
+
             DateTime start = DateTime.Now.AddDays(Convert.ToDouble(-id));
             DateTime end = DateTime.Now;
             Week week = new Week(start);

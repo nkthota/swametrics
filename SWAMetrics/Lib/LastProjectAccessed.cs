@@ -12,7 +12,7 @@ namespace SWAMetrics.Lib
         {
             var lastActivities = new List<LastActivity>();
 
-            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", "qcsiteadmin_db");
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", "qcsiteadmin_db_126");
             DataTable projects = projectDb.SqlQuery("select Project_Name,Domain_Name, Db_Name, PR_IS_ACTIVE from td.Projects");
             foreach (DataRow row in projects.Rows)
             {

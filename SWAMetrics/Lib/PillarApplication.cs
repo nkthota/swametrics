@@ -20,14 +20,14 @@ namespace SWAMetrics.Lib
 
         public DataTable GetTemplateProjects()
         {
-            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", "qcsiteadmin_db");
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", "qcsiteadmin_db_126");
             return projectDb.SqlQuery("select t1.PROJECT_NAME from [td].[PROJECTS] t1 inner join [td].[PROJECT_LINKS] t2 on t2.PRL_TO_PROJECT_UID = t1.PROJECT_UID where t2.PRL_FROM_PROJECT_UID = '33edb5f0-3364-48b4-ae3c-44c2076c152e' and t1.DOMAIN_NAME = 'SWA_TECHNOLOGY'");
         }
 
         private string GetProjectDbName(string project)
         {
-            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", "qcsiteadmin_db");
-            var _table = projectDb.SqlQuery($"select db_name from [qcsiteadmin_db].[td].[PROJECTS] where project_name = '{project}' and domain_name='swa_technology'");
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", "qcsiteadmin_db_126");
+            var _table = projectDb.SqlQuery($"select db_name from [qcsiteadmin_db_126].[td].[PROJECTS] where project_name = '{project}' and domain_name='swa_technology'");
             if (_table != null)
             {
                 ProjectDatbaseName = _table.Rows[0]["db_name"].ToString();
@@ -66,7 +66,63 @@ namespace SWAMetrics.Lib
         }
 
 
-        
+        // first time pass for full  projects
+        public DataTable GetFTPProject(string project, string start, string end)
+        {
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
+            start = Convert.ToDateTime(start).ToShortDateString();
+            end = Convert.ToDateTime(end).ToShortDateString();
+            //return projectDb.SqlQuery($"select Count(c.TS_TEST_ID) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN group by RN_TESTCYCL_ID having min(RN_EXECUTION_DATE) BETWEEN '{start}' and '{end}') b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed', 'Blocked') group by d.RN_STATUS");
+            return projectDb.SqlQuery($"select Count(c.TS_TEST_ID) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN where RN_EXECUTION_DATE BETWEEN '{start}' and '{end}' group by RN_TESTCYCL_ID) b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed', 'Blocked') group by d.RN_STATUS");
+        }
+
+        // first time pass for full  projects with release and application group by
+        public DataTable GetFTPProjectEx(string project, string start, string end)
+        {
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
+            start = Convert.ToDateTime(start).ToShortDateString();
+            end = Convert.ToDateTime(end).ToShortDateString();
+            //return projectDb.SqlQuery($"select Count(c.TS_TEST_ID) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN group by RN_TESTCYCL_ID having min(RN_EXECUTION_DATE) BETWEEN '{start}' and '{end}') b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed', 'Blocked') group by d.RN_STATUS");
+            return projectDb.SqlQuery($"select x.REL_NAME, CAST(x.REL_START_DATE as DATE) as REL_START_DATE, CAST(x.REL_END_DATE as DATE) as REL_END_DATE, z.Application , z.RN_STATUS, COUNT( z.RN_TESTCYCL_ID) as AppCount from td.Releases x inner join td.RELEASE_CYCLES y on x.REL_ID = y.RCYC_PARENT_ID inner join (select d.RN_TEST_ID, d.RN_TESTCYCL_ID, d.RN_ASSIGN_RCYC, c.TS_USER_TEMPLATE_02 as Application, d.RN_STATUS from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS , a.RN_ASSIGN_RCYC, b.RN_TESTCYCL_ID from td.RUN a inner join (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN where RN_EXECUTION_DATE BETWEEN '{start}' and '{end}' and RN_DRAFT = 'N' group by RN_TESTCYCL_ID) b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed', 'Blocked') and c.TS_USER_TEMPLATE_02 IS NOT NULL) z on y.RCYC_ID = z.RN_ASSIGN_RCYC group by x.REL_NAME, x.REL_START_DATE, x.REL_END_DATE, z.Application , z.RN_STATUS");
+        }
+
+        // first time pass for full  projects with release and application group by
+        public DataTable GetFTPProjectNoCycle(string project, string start, string end)
+        {
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
+            start = Convert.ToDateTime(start).ToShortDateString();
+            end = Convert.ToDateTime(end).ToShortDateString();
+            //return projectDb.SqlQuery($"select Count(c.TS_TEST_ID) as AppCount, d.RN_STATUS as RunStatus from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select RN_TESTCYCL_ID, min(RN_RUN_ID) as MinRunId from td.RUN group by RN_TESTCYCL_ID having min(RN_EXECUTION_DATE) BETWEEN '{start}' and '{end}') b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed', 'Blocked') group by d.RN_STATUS");
+            return projectDb.SqlQuery($"select Count(d.RN_TEST_ID) as AppCount, c.TS_USER_TEMPLATE_02 as Application, d.RN_STATUS from td.TEST c inner join (select a.RN_TEST_ID, a.RN_STATUS from td.RUN a inner join (select min(RN_RUN_ID) as MinRunId from td.RUN where RN_ASSIGN_RCYC IS NULL and RN_EXECUTION_DATE BETWEEN '{start}' and '{end}' and RN_DRAFT = 'N') b on a.RN_RUN_ID = b.MinRunId) d on c.TS_TEST_ID = d.RN_TEST_ID where d.RN_STATUS in ('Passed', 'Failed', 'Blocked') group by c.TS_USER_TEMPLATE_02, d.RN_STATUS");
+        }
+
+        // re-run projects
+        public DataTable GetTotalRunProject(string project, string start, string end)   
+        {
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
+            start = Convert.ToDateTime(start).ToShortDateString();
+            end = Convert.ToDateTime(end).ToShortDateString();
+            return projectDb.SqlQuery($"select Count(t2.TS_TEST_ID) as AppCount, t1.RN_STATUS as RunStatus from td.TEST t2 inner join (select RN_RUN_ID, RN_TEST_ID, RN_STATUS from td.RUN where RN_EXECUTION_DATE BETWEEN '{start}' and '{end}' and RN_STATUS in ('Passed', 'Failed','Blocked')) t1 on t2.TS_TEST_ID = t1.RN_TEST_ID group by t1.RN_STATUS");
+        }
+
+        // re-run projects
+        public DataTable GetTotalRunProjectEx(string project, string start, string end)
+        {
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
+            start = Convert.ToDateTime(start).ToShortDateString();
+            end = Convert.ToDateTime(end).ToShortDateString();
+            return projectDb.SqlQuery($"select t6.TS_USER_TEMPLATE_02 as Application, t5.REL_NAME, t5.REL_START_DATE, t5.REL_END_DATE, t5.RN_STATUS, Count(t5.RN_RUN_ID) as AppCount from td.TEST t6 inner join (select t4.REL_NAME, t4.REL_START_DATE, t4.REL_END_DATE, t3.RN_STATUS, t3.RN_RUN_ID, t3.RN_TEST_ID from td.RELEASES t4 inner join (select t2.RCYC_PARENT_ID, t1.RN_ASSIGN_RCYC, t1.RN_RUN_ID, t1.RN_STATUS, t1.RN_TEST_ID from td.RELEASE_CYCLES t2 inner join (select RN_TEST_ID, RN_RUN_ID, RN_STATUS, RN_ASSIGN_RCYC from td.RUN where RN_EXECUTION_DATE BETWEEN '{start}' and '{end}' and RN_DRAFT = 'N' and RN_STATUS in ('Passed', 'Failed','Blocked')) t1 on t2.RCYC_ID = t1.RN_ASSIGN_RCYC) t3 on t4.REL_ID = t3.RCYC_PARENT_ID) t5 on t5.RN_TEST_ID = t6.TS_TEST_ID where t6.TS_USER_TEMPLATE_02 IS NOT NULL group by t6.TS_USER_TEMPLATE_02, t5.REL_NAME, t5.REL_START_DATE, t5.REL_END_DATE, t5.RN_STATUS");
+        }
+
+        // re-run projects - no cycle
+        public DataTable GetTotalRunProjectNoCycle(string project, string start, string end)
+        {
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
+            start = Convert.ToDateTime(start).ToShortDateString();
+            end = Convert.ToDateTime(end).ToShortDateString();
+            return projectDb.SqlQuery($"select t1.TS_USER_TEMPLATE_02 as Application, Count(t2.RN_RUN_ID) as AppCount, t2.RN_STATUS from td.TEST t1 inner join (select RN_TEST_ID, RN_RUN_ID, RN_STATUS from td.RUN where RN_ASSIGN_RCYC IS NULL and RN_EXECUTION_DATE BETWEEN '{start}' and '{end}' and RN_DRAFT = 'N' and RN_STATUS in ('Passed', 'Failed','Blocked')) t2 on t2.RN_TEST_ID = t1.TS_TEST_ID group by t1.TS_USER_TEMPLATE_02, t2.RN_STATUS");
+        }
+
 
         // Defects
 

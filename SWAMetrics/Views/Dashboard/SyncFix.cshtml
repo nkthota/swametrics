@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "SyncFix";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="content animate-panel">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Link Id</label>
+                    <div class="col-sm-8"><input type="text" id="linkid" class="form-control"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">EP1 Id</label>
+                    <div class="col-sm-8"><input type="text" id="ep1id" class="form-control"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">EP2 Id</label>
+                    <div class="col-sm-8"><input type="text" id="ep2id" class="form-control"></div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <button class="btn btn-danger" type="submit" id="ignorerecord">Ignore</button>
+                    <button class="btn btn-success" type="submit" id="enablerecord">Enable</button>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Link Id</label>
+                    <div class="col-sm-8"><input type="text" id="ep1linkid" class="form-control"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Mapping Id</label>
+                    <div class="col-sm-8"><input type="text" id="ep1recordid" class="form-control"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">EP1 Id</label>
+                    <div class="col-sm-8"><input type="text" id="uep1id" class="form-control"></div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit" id="updateep1">Update EP1</button>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Link Id</label>
+                    <div class="col-sm-8"><input type="text" id="ep2linkid" class="form-control"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Mapping Id</label>
+                    <div class="col-sm-8"><input type="text" id="ep2recordid" class="form-control"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">EP2 Id</label>
+                    <div class="col-sm-8"><input type="text" id="uep2id" class="form-control"></div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <button class="btn btn-warning" type="submit" id="updateep2">Update EP2</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/css/select2.css" />
+    @Styles.Render("~/bundles/sweetAlert/css")
+    @Styles.Render("~/bundles/toastr/css")
+}
+
+
+@section Scripts {
+    <script src="~/Scripts/select2.js"></script>
+    @Scripts.Render("~/bundles/sweetAlert/js")
+    @Scripts.Render("~/bundles/toastr/js")
+
+    <script type="text/javascript">
+        $('#ignorerecord').click(function () {
+            $.getJSON('/Dashboard/IgnoreRecord/' + $('#linkid').val() + '/' + $('#ep1id').val() + '/' + $('#ep2id').val(),
+                function (data) {
+                    console.log(data);
+                    swal({
+                        title: "Sync Record!",
+                        text: "Record Updated!",
+                        type: "success"
+                    });
+                });
+        });
+
+        $('#enablerecord').click(function () {
+            $.getJSON('/Dashboard/EnableRecord/' + $('#linkid').val() + '/' + $('#ep1id').val() + '/' + $('#ep2id').val(),
+                function (data) {
+                    console.log(data);
+                    swal({
+                        title: "Sync Record!",
+                        text: "Record Updated!",
+                        type: "success"
+                    });
+                });
+        });
+
+        $('#updateep1').click(function () {
+            $.getJSON('/Dashboard/UpdateEp1/' + $('#ep1linkid').val() + '/' + $('#ep1recordid').val() + '/' + $('#uep1id').val(),
+                function (data) {
+                    console.log(data);
+                    swal({
+                        title: "Sync Record!",
+                        text: "EP1 Record Updated!",
+                        type: "success"
+                    });
+                });
+        });
+
+        $('#updateep2').click(function () {
+            console.log('/Dashboard/UpdateEp2/' + $('#ep2linkid').val() + '/' + $('#ep2recordid').val() + '/' + $('#uep2id').val());
+            $.getJSON('/Dashboard/UpdateEp2/' + $('#ep2linkid').val() + '/' + $('#ep2recordid').val() + '/' + $('#uep2id').val(),
+                function (data) {
+                    console.log(data);
+                    swal({
+                        title: "Sync Record!",
+                        text: "EP2 Record Updated!",
+                        type: "success"
+                    });
+                });
+        });
+
+    </script>
+}
+

@@ -24,6 +24,42 @@ namespace SWAMetrics.Controllers
             return View("Sample");
         }
 
+        public ActionResult Calendar()
+        {
+            return View();
+        }
+
+        public ActionResult SyncFix()
+        {
+            return View("SyncFix");
+        }
+
+        public JsonResult IgnoreRecord(string project, string release, string application)
+        {
+            var retData = new SyncManager().UpdateRecord(project, release, application, "t");
+            return Json(new { retData }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult EnableRecord(string project, string release, string application)
+        {
+            var retData = new SyncManager().UpdateRecord(project, release, application, "f");
+            return Json(new { retData }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateEp1(string project, string release, string application) 
+        {
+            var retData = new SyncManager().UpdateMappingRecord(project, release, application, "ep1");
+            return Json(new { retData }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateEp2(string project, string release, string application)
+        {
+            var retData = new SyncManager().UpdateMappingRecord(project, release, application, "ep2");
+            return Json(new { retData }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         public ActionResult CycleFirstTimePass()
         {
             return View();
@@ -495,6 +531,8 @@ namespace SWAMetrics.Controllers
             return new JsonResult { Data = json, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        // New report services that are triggered from excel for Joel
+
         public JsonResult GetReleaseData(string project, string release)
         {
             ProjectExecutionRelease projectExecutionRelease = new ProjectExecutionRelease(project, release);
@@ -635,6 +673,216 @@ namespace SWAMetrics.Controllers
         {
             return JsonConvert.SerializeObject(new Pillar().GetApplicationMajorClosedAgingDefects(project, release, application));
         }
+
+        // main services using post
+
+        [HttpPost]
+        public void ProjectReleasesByDateRange(string project, string start, string end)
+        {
+            // Implementation
+        }
+
+        [HttpPost]
+        public void ProjectReleaseApplications(string project, string start, string end)
+        {
+            // Implementation
+        }
+
+        // first time pass by project and time range
+        [HttpPost]
+        public string FTPProject(string project, string start, string end)   
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetFTPProject(project, start, end));
+        }
+
+        // first time pass by project and time range - by release, application
+        [HttpPost]
+        public string FTPProjectEx(string project, string start, string end)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetFTPProjectEx(project, start, end));
+        }
+
+        // first time pass by project and time range - by release, application
+        [HttpPost]
+        public string FTPProjectNoCycle(string project, string start, string end)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetFTPProjectNoCycle(project, start, end));
+        }
+
+        // total runs project and time range
+        [HttpPost]
+        public string TotalRunProject(string project, string start, string end)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetTotalRunProject(project, start, end));
+        }
+
+        // total runs project and time range - by release, application
+        [HttpPost]
+        public string TotalRunProjectEx(string project, string start, string end)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetTotalRunProjectEx(project, start, end));
+        }
+
+        // total runs project and time range - by release, application
+        [HttpPost]
+        public string TotalRunProjectNoCycle(string project, string start, string end)
+        {
+            return JsonConvert.SerializeObject(new Pillar().GetTotalRunProjectNoCycle(project, start, end));
+        }
+
+        // Audit
+
+        public ActionResult Audit()
+        {
+            return View();
+        }
+
+        public ActionResult AuditProject()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public string TestDesignSteps(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetTestSteps(project));
+        }
+
+        [HttpPost]
+        public string TestDuplicate(string project, string startdate, string enddate) 
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetTestDuplicate(project));
+        }
+
+        [HttpPost]
+        public string CyclesAssociated(string project, string startdate, string enddate)  
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetAssociatedCycles(project));
+        }
+
+        [HttpPost]
+        public string ReqCoverage(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetReqCoverage(project));
+        }
+
+        [HttpPost]
+        public string ReqSourceId(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetReqSourceId(project));
+        }
+
+        [HttpPost]
+        public string ReqCycle(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetReqCycle(project));
+        }
+
+        [HttpPost]
+        public string DefectTestLinked(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetDefectInstanceLink(project));
+        }
+
+        [HttpPost]
+        public string DefectSWAId(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetDefectSWAId(project));
+        }
+
+        [HttpPost]
+        public string DefectPtr(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetDefectPtr(project));
+        }
+
+        [HttpPost]
+        public string TestInstancePtr(string project, string startdate, string enddate) 
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetTestInstancePtr(project));
+        }
+
+        [HttpPost]
+        public string CycleTestInstancePtr(string project, string cycle)
+        {
+            return JsonConvert.SerializeObject(new AuditMetricsCycle(cycle).GetTestInstancePtr(project));
+        }
+
+        [HttpPost]
+        public string TestSetCycle(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetTestSetCycle(project));
+        }
+
+        [HttpPost]
+        public string TestSetNotCompleted(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetTestSetNotCompleted(project));
+        }
+
+        [HttpPost]
+        public string CycleTestSetNotCompleted(string project, string cycle)
+        {
+            return JsonConvert.SerializeObject(new AuditMetricsCycle(cycle).GetTestSetNotCompleted(project));
+        }
+
+        [HttpPost]
+        public string TestInstanceLinked(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetTestInstanceLinked(project));
+        }
+
+        [HttpPost]
+        public string CycleTestInstanceLinked(string project, string cycle)
+        {
+            return JsonConvert.SerializeObject(new AuditMetricsCycle(cycle).GetTestInstanceLinked(project));
+        }
+
+        [HttpPost]
+        public string RunFastRun(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetRunFastRun(project));
+        }
+
+        [HttpPost]
+        public string CycleRunFastRun(string project, string cycle)
+        {
+            return JsonConvert.SerializeObject(new AuditMetricsCycle(cycle).GetRunFastRun(project));
+        }
+
+        [HttpPost]
+        public string ExcelReport(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetExcelReport(project));
+        }
+        
+        // Get missing data details
+        [HttpPost]
+        public string MissingData(string project, string startdate, string enddate, string metric)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetMissingData(project, metric));
+        }
+
+        [HttpPost]
+        public string CycleMissingData(string project, string cycle, string metric)
+        {
+            return JsonConvert.SerializeObject(new AuditMetricsCycle(cycle).GetMissingData(project, metric));
+        }
+
+        // Get test instance status details
+        [HttpPost]
+        public string CycleTestInstanceStatus(string project, string cycle)
+        {
+            return JsonConvert.SerializeObject(new AuditMetricsCycle(cycle).GetTestInstanceStatus(project));
+        }
+
+        // Get latest run status if test in give cycles - Richard request
+        [HttpPost]
+        public string LatestTestStatusByCycle(string cycles)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics("1/1/2019", "1/1/2019").GetLatestTestStatusByCycle(cycles));
+        }
+
     }   
 
     public class FirstTimePassed
@@ -647,5 +895,12 @@ namespace SWAMetrics.Controllers
     {
         public string id { get; set; }
         public string text { get; set; }
+    }
+
+    public class SyncData
+    {
+        public string linkid { get; set; }
+        public string ep1id { get; set; }
+        public string ep2id { get; set; }
     }
 }

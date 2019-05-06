@@ -1,0 +1,1841 @@
+﻿
+@{
+    ViewBag.Title = "AuditProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content">
+
+<div class="row">
+    <div class="col-lg-12 right">
+        <span style="float: right;"><button class="btn btn-success run-tour">Help</button></span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 text-center welcome-message">
+        <h2>
+            ALM Project Health Dashboard
+        </h2>
+    </div>
+</div>
+
+@*<div class="row">
+    <div class="col-lg-12 text-center" style="margin-bottom: 20px;">
+        <div data-toggle="buttons" class="btn-group">
+            <label class="btn btn-info" onclick="location.href = '/Dashboard/Audit';">
+                <input type="checkbox"> Execution Entities
+            </label>
+            <label class="btn btn-info active" onclick="location.href = '/Dashboard/AuditProject';">
+                <input type="checkbox"> Non-Execution Entities
+            </label>
+        </div>
+    </div>
+</div>*@
+
+<div class="row tour-1">
+    <div class="hpanel">
+        <div class="panel-heading hbuilt">
+            <div class="row">
+                <div class="col-lg-3 col-lg-offset-1">
+                    <div class="form-group">
+                        <label class="control-label">Project Name:</label>
+                        <input type="text" class="form-control" id="project" style="height: 30px;"/>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">Date Range:</label>
+                        <div class="input-daterange input-group" id="datepicker">
+                            <input type="text" class="input-sm form-control" id="start" name="start"/>
+                            <span class="input-group-addon">to</span>
+                            <input type="text" class="input-sm form-control" id="end" name="end"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn btn-primary" style="margin-top:23px; padding: 4px;" id="refreshdata">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade hmodal-danger" id="missedentity" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="color-line"></div>
+            <div class="modal-header" style="text-align:center;">
+                <h2>Non-Compliant Entities</h2>
+                <hr/>
+                <h3 id="project-modal-text"></h3>
+                <h4 id="project-module-text"></h4>
+                <p id="project-metric-text"></p>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="example1" class="display table table-bordered" width="100%" style="font-size:85%;">
+                        <thead>
+                        <tr>
+                            <th>Entity Id</th>
+                            <th>Entity Name</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row tour-2">
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Test Plan</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-info" id="tpds"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Test
+                    </span>
+                    <br/>
+                    <small>
+                        Tests with design steps.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp1" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts1"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts2"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts3"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Test Plan</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-info" id="tpdr"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Test
+                    </span>
+                    <br/>
+                    <small>
+                        Test with no duplicate record.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp2" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts21"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts22"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts23"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Release Cycles</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-primary2" id="rcts"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Cycle
+                    </span>
+                    <br/>
+                    <small>
+                        Cycle with associated test set.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp3" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts31"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts32"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts33"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Requirements</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-success" id="rqtc"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Requirement
+                    </span>
+                    <br/>
+                    <small>
+                        Requirements with test coverage.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp4" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts41"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts42"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts43"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Requirements</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-success" id="rqsid"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Requirement
+                    </span>
+                    <br/>
+                    <small>
+                        Requirement with source id.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp5" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts51"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts52"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts53"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Requirements</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-success" id="rqcy"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Requirement
+                    </span>
+                    <br/>
+                    <small>
+                        Requirement with cycle associated.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp6" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts61"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts62"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts63"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Defects</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-danger" id="dfti"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Defect
+                    </span>
+                    <br/>
+                    <small>
+                        Defects linked to test instance.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp7" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts71"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts72"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts73"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Defects</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-danger" id="dfid"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Defect
+                    </span>
+                    <br/>
+                    <small>
+                        Defect with SWA Defect Id.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp8" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts81"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts82"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts83"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Defects</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-danger" id="dfptr"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Defect
+                    </span>
+                    <br/>
+                    <small>
+                        PTR linked to test instance.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp9" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts91"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts92"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts93"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Test Lab</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-warning" id="tsrc"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Test Set
+                    </span>
+                    <br/>
+                    <small>
+                        Test set with linked release cycle
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp10" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts101"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts102"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts103"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Test Lab</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-warning"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Test Instance
+                    </span>
+                    <br/>
+                    <small>
+                        Test Instance with no more than one Not Completed run
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp11" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts111"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts112"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts113"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>Test Lab</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-warning" id="tifd"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Test Instance
+                    </span>
+                    <br/>
+                    <small>
+                        Failed/Blocked Test Instance linked to defect
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp12" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts121"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts122"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts123"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>TEST LAB</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-warning" id="rfr"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Runs
+                    </span>
+                    <br/>
+                    <small>
+                        Number of non fast runs.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp13" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts131"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts132"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts133"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="hpanel stats">
+            <div class="panel-body h-200 list">
+                <div class="stats-title pull-left">
+                    <h4>TEST LAB</h4>
+                </div>
+                <div class="stats-icon pull-right">
+                    <i class="pe-7s-science fa-4x text-warning" id="tiptr"></i>
+                </div>
+                <div class="m-t-xl">
+                    <span class="font-bold no-margins">
+                        Test Instance
+                    </span>
+                    <br/>
+                    <small>
+                        Test Instance with PTR having linked defect.
+                    </small>
+                </div>
+                <div class="progress m-t-xs full progress-small">
+                    <div id="tp14" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Sample Size</small>
+                        <h4 id="ts141"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">Criteria Size</small>
+                        <h4 id="ts142"></h4>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <small class="stats-label">%</small>
+                        <h4 id="ts143"></h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="hpanel hbgblue">
+            <div class="panel-body">
+                <div class="text-center">
+                    <h3>Excel Reports</h3>
+                    <p class="text-big font-light" id="sqlr">
+
+                    </p>
+                    <small>
+                        Number of SQL based Excel reports.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/xeditable/css")
+    @Styles.Render("~/bundles/select2/css")
+    @Styles.Render("~/bundles/touchspin/css")
+    @Styles.Render("~/bundles/datepicker/css")
+    @Styles.Render("~/bundles/bootstrapCheckbox/css")
+    @Styles.Render("~/bundles/datetimepicker/css")
+    @Styles.Render("~/bundles/clockpicker/css")
+    @Styles.Render("~/bundles/datatables/css")
+    @Styles.Render("~/bundles/bootstrapTour/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/moment/js")
+    @Scripts.Render("~/bundles/xeditable/js")
+    @Scripts.Render("~/bundles/select2/js")
+    @Scripts.Render("~/bundles/touchspin/js")
+    @Scripts.Render("~/bundles/datepicker/js")
+    @Scripts.Render("~/bundles/datetimepicker/js")
+    @Scripts.Render("~/bundles/clockpicker/js")
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+    @Scripts.Render("~/bundles/datatablesPlugins/js")
+    @Scripts.Render("~/bundles/bootstrapTour/js")
+    @Scripts.Render("~/bundles/flot/js")
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $('.pe-7s-science').css('cursor', 'pointer');
+
+            // Instance the tour
+            var tour = new Tour({
+                backdrop: true,
+                onShown: function (tour) {
+
+                    // ISSUE    - https://github.com/sorich87/bootstrap-tour/issues/189
+                    // FIX      - https://github.com/sorich87/bootstrap-tour/issues/189#issuecomment-49007822
+
+                    // You have to write your used animated effect class
+                    // Standard animated class
+                    $('.animated').removeClass('fadeIn');
+                    // Animate class from animate-panel plugin
+                    $('.animated-panel').removeClass('zoomIn');
+
+                },
+                steps: [
+                    {
+                        element: ".tour-1",
+                        title: "Selection",
+                        content: "Enter the project name and the date range to pull the metrics.",
+                        placement: "bottom"
+                    },
+                    {
+                        element: ".tour-2",
+                        title: "Metric Report",
+                        content: "Each metric is entity selection and the criteria counts are listed here. Clicking on the icon provided the details on the deviated entities",
+                        placement: "top"
+
+                    }
+                ]
+            });
+
+            // Initialize the tour
+            tour.init();
+
+            // Restart the tour
+            $('.run-tour').click(function () {
+                tour.restart();
+            });
+
+        });
+
+        $('#tpds').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"tpds"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Test Id</th><th>Test Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].TS_TEST_ID + '</td><td>' + data[i].TS_NAME + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Test Plan");
+                    $('#project-metric-text').html("Description: Tests with no design steps.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#tpdr').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"tpdr"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Test Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].TS_NAME + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Test Plan");
+                    $('#project-metric-text').html("Description: Tests with duplicate records.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#rcts').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"rcts"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Release Cycle Id</th><th>Cycle Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].RCYC_ID + '</td><td>' + data[i].RCYC_NAME + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Releases");
+                    $('#project-metric-text').html("Description: Cycles with no associated test set.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#rqtc').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"rqtc"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Requirement Id</th><th>Req Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].RQ_REQ_ID + '</td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Requirements");
+                    $('#project-metric-text').html("Description: Requirements with no test coverage.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#rqsid').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"rqsid"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Requirement Id</th><th>Req Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].RQ_REQ_ID + '</td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Requirements");
+                    $('#project-metric-text').html("Description: Requirements with no source id.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#rqcy').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"rqcy"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Requirement Id</th><th>Req Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].RQ_REQ_ID + '</td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Requirements");
+                    $('#project-metric-text').html("Description: Requirements with no cycle associated.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#dfti').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"dfti"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Defect Id</th><th>Defect Summary</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].BG_BUG_ID + '</td><td>' + data[i].BG_SUMMARY + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Defects");
+                    $('#project-metric-text').html("Description: Defects not Linked to test instance.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#dfid').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"dfid"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Defect Id</th><th>Defect Summary</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].BG_BUG_ID + '</td><td>' + data[i].BG_SUMMARY + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Defects");
+                    $('#project-metric-text').html("Description: Defects with no SWA Defect Id.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#dfptr').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"dfptr"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Defect Id</th><th>Defect Summary</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].BG_BUG_ID + '</td><td>' + data[i].BG_SUMMARY + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Defects");
+                    $('#project-metric-text').html("Description: PTR not linked to test instance.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#tsrc').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"tsrc"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Cycle Id</th><th>Cycle Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].CY_CYCLE_ID + '</td><td>' + data[i].CY_CYCLE + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Test Lab");
+                    $('#project-metric-text').html("Description: Test set with no linked release cycle");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#tifd').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"tifd"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Test Instance Id</th><th>Test Id</th><th>Test Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td>' + data[i].TC_TESTCYCL_ID + '</td><td>' + data[i].TC_TEST_ID + '</td><td>' + data[i].TS_NAME + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Test Lab");
+                    $('#project-metric-text').html("Description: Failed/Blocked Test Instance not linked to defect");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        $('#tiptr').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"tiptr"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Test Instance Id</th><th>Test Id</th><th>Test Name</th><th>PTR</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.wpquality01:8080/qcbin/TestLabModule-000000003649890581?EntityType=ITestInstance&EntityID=' + data[i].TC_TESTCYCL_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].TC_TESTCYCL_ID + '</a></td><td>' + data[i].TC_TEST_ID + '</td><td>' + data[i].TS_NAME + '</td><td>' + data[i].PTR + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Test Lab");
+                    $('#project-metric-text').html("Description: Test Instance with PTR having no linked defect.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
+        function resetdata() {
+
+            $("#ts1").html("");
+            $("#ts2").html("");
+            $("#ts3").html("");
+
+            $("#tp1").removeClass('progress-bar-success');
+            $("#tp1").removeClass('progress-bar-danger')
+            $("#tp1").css('width', 0);
+
+            $("#ts21").html("");
+            $("#ts22").html("");
+            $("#ts23").html("");
+
+            $("#tp2").removeClass('progress-bar-success');
+            $("#tp2").removeClass('progress-bar-danger')
+            $("#tp2").css('width', 0);
+
+            $("#ts31").html("");
+            $("#ts32").html("");
+            $("#ts33").html("");
+
+            $("#tp3").removeClass('progress-bar-success');
+            $("#tp3").removeClass('progress-bar-danger')
+            $("#tp3").css('width', 0);
+
+            $("#ts41").html("");
+            $("#ts42").html("");
+            $("#ts43").html("");
+
+            $("#tp4").removeClass('progress-bar-success');
+            $("#tp4").removeClass('progress-bar-danger')
+            $("#tp4").css('width', 0);
+
+
+            $("#ts51").html("");
+            $("#ts52").html("");
+            $("#ts53").html("");
+
+            $("#tp5").removeClass('progress-bar-success');
+            $("#tp5").removeClass('progress-bar-danger')
+            $("#tp5").css('width', 0);
+
+            $("#ts61").html("");
+            $("#ts62").html("");
+            $("#ts63").html("");
+
+            $("#tp6").removeClass('progress-bar-success');
+            $("#tp6").removeClass('progress-bar-danger')
+            $("#tp6").css('width', 0);
+
+            $("#ts71").html("");
+            $("#ts72").html("");
+            $("#ts73").html("");
+
+            $("#tp7").removeClass('progress-bar-success');
+            $("#tp7").removeClass('progress-bar-danger')
+            $("#tp7").css('width', 0);
+
+            $("#ts81").html("");
+            $("#ts82").html("");
+            $("#ts83").html("");
+
+            $("#tp8").removeClass('progress-bar-success');
+            $("#tp8").removeClass('progress-bar-danger')
+            $("#tp8").css('width', 0);
+
+            $("#ts91").html("");
+            $("#ts92").html("");
+            $("#ts93").html("");
+
+            $("#tp9").removeClass('progress-bar-success');
+            $("#tp9").removeClass('progress-bar-danger')
+            $("#tp9").css('width', 0);
+
+            $("#ts101").html("");
+            $("#ts102").html("");
+            $("#ts103").html("");
+
+            $("#tp10").removeClass('progress-bar-success');
+            $("#tp10").removeClass('progress-bar-danger')
+            $("#tp10").css('width', 0);
+
+            $("#ts111").html("");
+            $("#ts112").html("");
+            $("#ts113").html("");
+
+            $("#tp11").removeClass('progress-bar-success');
+            $("#tp11").removeClass('progress-bar-danger')
+            $("#tp11").css('width', 0);
+
+            $("#ts121").html("");
+            $("#ts122").html("");
+            $("#ts123").html("");
+
+            $("#tp12").removeClass('progress-bar-success');
+            $("#tp12").removeClass('progress-bar-danger')
+            $("#tp12").css('width', 0);
+
+            $("#ts131").html("");
+            $("#ts132").html("");
+            $("#ts133").html("");
+
+            $("#tp13").removeClass('progress-bar-success');
+            $("#tp13").removeClass('progress-bar-danger')
+            $("#tp13").css('width', 0);
+        }
+
+        $(document).ready(function () {
+
+            $('.js-example-basic-multiple').select2();
+
+            $('#datepicker').datepicker();
+
+            $("#datepicker").on("changeDate", function (event) {
+                $("#my_hidden_input").val(
+                    $("#datepicker").datepicker('getFormattedDate')
+                )
+            });
+
+        });
+
+        $("#refreshdata").click(function () {
+
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            resetdata();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/TestDesignSteps',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts1").html(data["SampleSize"]);
+                        $("#ts2").html(data["CriteriaSize"]);
+                        $("#ts3").html(per);
+                        if (per > 95) {
+                            $("#tp1").removeClass('progress-bar-danger');
+                            $("#tp1").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp1").removeClass('progress-bar-success');
+                            $("#tp1").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp1").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/TestDuplicate/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts21").html(data["SampleSize"]);
+                        $("#ts22").html(data["CriteriaSize"]);
+                        $("#ts23").html(per);
+                        if (per > 95) {
+                            $("#tp2").removeClass('progress-bar-danger');
+                            $("#tp2").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp2").removeClass('progress-bar-success');
+                            $("#tp2").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp2").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/CyclesAssociated/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts31").html(data["SampleSize"]);
+                        $("#ts32").html(data["CriteriaSize"]);
+                        $("#ts33").html(per);
+                        if (per > 95) {
+                            $("#tp3").removeClass('progress-bar-danger');
+                            $("#tp3").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp3").removeClass('progress-bar-success');
+                            $("#tp3").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp3").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/ReqCoverage/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts41").html(data["SampleSize"]);
+                        $("#ts42").html(data["CriteriaSize"]);
+                        $("#ts43").html(per);
+                        if (per > 95) {
+                            $("#tp4").removeClass('progress-bar-danger');
+                            $("#tp4").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp4").removeClass('progress-bar-success');
+                            $("#tp4").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp4").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/ReqSourceId/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts51").html(data["SampleSize"]);
+                        $("#ts52").html(data["CriteriaSize"]);
+                        $("#ts53").html(per);
+                        if (per > 95) {
+                            $("#tp5").removeClass('progress-bar-danger');
+                            $("#tp5").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp5").removeClass('progress-bar-success');
+                            $("#tp5").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp5").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/ReqCycle/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts61").html(data["SampleSize"]);
+                        $("#ts62").html(data["CriteriaSize"]);
+                        $("#ts63").html(per);
+                        if (per > 95) {
+                            $("#tp6").removeClass('progress-bar-danger');
+                            $("#tp6").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp6").removeClass('progress-bar-success');
+                            $("#tp6").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp6").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/DefectTestLinked/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts71").html(data["SampleSize"]);
+                        $("#ts72").html(data["CriteriaSize"]);
+                        $("#ts73").html(per);
+                        if (per > 95) {
+                            $("#tp7").removeClass('progress-bar-danger');
+                            $("#tp7").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp7").removeClass('progress-bar-success');
+                            $("#tp7").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp7").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/DefectSWAId/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts81").html(data["SampleSize"]);
+                        $("#ts82").html(data["CriteriaSize"]);
+                        $("#ts83").html(per);
+                        if (per > 95) {
+                            $("#tp8").removeClass('progress-bar-danger');
+                            $("#tp8").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp8").removeClass('progress-bar-success');
+                            $("#tp8").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp8").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/DefectPtr/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts91").html(data["SampleSize"]);
+                        $("#ts92").html(data["CriteriaSize"]);
+                        $("#ts93").html(per);
+                        if (per > 95) {
+                            $("#tp9").removeClass('progress-bar-danger');
+                            $("#tp9").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp9").removeClass('progress-bar-success');
+                            $("#tp9").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp9").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/TestSetCycle/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts101").html(data["SampleSize"]);
+                        $("#ts102").html(data["CriteriaSize"]);
+                        $("#ts103").html(per);
+                        if (per > 95) {
+                            $("#tp10").removeClass('progress-bar-danger');
+                            $("#tp10").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp10").removeClass('progress-bar-success');
+                            $("#tp10").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp10").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/TestSetNotCompleted/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts111").html(data["SampleSize"]);
+                        $("#ts112").html(data["CriteriaSize"]);
+                        $("#ts113").html(per);
+                        if (per > 95) {
+                            $("#tp11").removeClass('progress-bar-danger');
+                            $("#tp11").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp11").removeClass('progress-bar-success');
+                            $("#tp11").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp11").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/TestInstanceLinked/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts121").html(data["SampleSize"]);
+                        $("#ts122").html(data["CriteriaSize"]);
+                        $("#ts123").html(per);
+                        if (per > 95) {
+                            $("#tp12").removeClass('progress-bar-danger');
+                            $("#tp12").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp12").removeClass('progress-bar-success');
+                            $("#tp12").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp12").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/RunFastRun/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts131").html(data["SampleSize"]);
+                        $("#ts132").html(data["CriteriaSize"]);
+                        $("#ts133").html(per);
+                        if (per > 95) {
+                            $("#tp13").removeClass('progress-bar-danger');
+                            $("#tp13").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp13").removeClass('progress-bar-success');
+                            $("#tp13").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp13").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/TestInstancePtr/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts141").html(data["SampleSize"]);
+                        $("#ts142").html(data["CriteriaSize"]);
+                        $("#ts143").html(per);
+                        if (per > 95) {
+                            $("#tp14").removeClass('progress-bar-danger');
+                            $("#tp14").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp14").removeClass('progress-bar-success');
+                            $("#tp14").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp14").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/ExcelReport/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    $("#sqlr").html(data["SampleSize"]);
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+        });
+
+    </script>
+}
+

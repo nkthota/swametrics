@@ -20,8 +20,8 @@ namespace SWAMetrics.Lib
 
         public ProjectExecutionRelease(string project, string release)    
         {
-            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", "qcsiteadmin_db");
-            _table = projectDb.SqlQuery($"select db_name from [qcsiteadmin_db].[td].[PROJECTS] where project_name = '{project}'");
+            Database projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", "qcsiteadmin_db_126");
+            _table = projectDb.SqlQuery($"select db_name from [qcsiteadmin_db_126].[td].[PROJECTS] where project_name = '{project}'");
             if (_table != null)
             {
                 ProjectDatbaseName = _table.Rows[0]["db_name"].ToString();

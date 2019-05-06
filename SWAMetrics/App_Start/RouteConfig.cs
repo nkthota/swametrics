@@ -14,9 +14,19 @@ namespace SWAMetrics
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "DashboardCycle",
+                url: "{controller}/{action}/{cycles}",
+                defaults: new { controller = "Dashboard", action = "LatestTestStatusByCycle", cycles = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 name: "DashboardRelease",
-                url: "{Dashboard}/{action}/{project}/{release}/{application}",
-                defaults: new { controller = "Dashboard", action = "GetReleaseData", project = UrlParameter.Optional, release = UrlParameter.Optional, application = UrlParameter.Optional}
+                url: "{controller}/{action}/{project}/{release}/{application}",
+                defaults: new
+                {
+                    controller = "Dashboard", action = "GetReleaseData", project = UrlParameter.Optional,
+                    release = UrlParameter.Optional, application = UrlParameter.Optional
+                }
             );
 
             routes.MapRoute(
