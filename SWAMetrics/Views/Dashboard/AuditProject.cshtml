@@ -7,197 +7,375 @@
 
 <div class="content">
 
-<div class="row">
-    <div class="col-lg-12 right">
-        <span style="float: right;"><button class="btn btn-success run-tour">Help</button></span>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-12 text-center welcome-message">
-        <h2>
-            ALM Project Health Dashboard
-        </h2>
-    </div>
-</div>
-
-@*<div class="row">
-    <div class="col-lg-12 text-center" style="margin-bottom: 20px;">
-        <div data-toggle="buttons" class="btn-group">
-            <label class="btn btn-info" onclick="location.href = '/Dashboard/Audit';">
-                <input type="checkbox"> Execution Entities
-            </label>
-            <label class="btn btn-info active" onclick="location.href = '/Dashboard/AuditProject';">
-                <input type="checkbox"> Non-Execution Entities
-            </label>
+    <div class="row">
+        <div class="col-lg-12 text-center welcome-message">
+            <h2>
+                ALM Project Health Dashboard <span style="float: right;"><button class="btn btn-success run-tour">Help</button></span>
+            </h2>
         </div>
     </div>
-</div>*@
 
-<div class="row tour-1">
-    <div class="hpanel">
-        <div class="panel-heading hbuilt">
-            <div class="row">
-                <div class="col-lg-3 col-lg-offset-1">
-                    <div class="form-group">
-                        <label class="control-label">Project Name:</label>
-                        <input type="text" class="form-control" id="project" style="height: 30px;"/>
-                    </div>
+    @*<div class="row">
+            <div class="col-lg-12 text-center" style="margin-bottom: 20px;">
+                <div data-toggle="buttons" class="btn-group">
+                    <label class="btn btn-info" onclick="location.href = '/Dashboard/Audit';">
+                        <input type="checkbox"> Execution Entities
+                    </label>
+                    <label class="btn btn-info active" onclick="location.href = '/Dashboard/AuditProject';">
+                        <input type="checkbox"> Non-Execution Entities
+                    </label>
                 </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label">Date Range:</label>
-                        <div class="input-daterange input-group" id="datepicker">
-                            <input type="text" class="input-sm form-control" id="start" name="start"/>
-                            <span class="input-group-addon">to</span>
-                            <input type="text" class="input-sm form-control" id="end" name="end"/>
+            </div>
+        </div>*@
+
+    <div class="row tour-1">
+        <div class="hpanel">
+            <div class="panel-heading hbuilt">
+                <div class="row">
+                    <div class="col-lg-3 col-lg-offset-1">
+                        <div class="form-group">
+                            <label class="control-label">Project Name:</label>
+                            <input type="text" class="form-control" id="project" style="height: 30px;" />
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-2">
-                    <button class="btn btn-primary" style="margin-top:23px; padding: 4px;" id="refreshdata">Submit</button>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="control-label">Date Range:</label>
+                            <div class="input-daterange input-group" id="datepicker">
+                                <input type="text" class="input-sm form-control" id="start" name="start" />
+                                <span class="input-group-addon">to</span>
+                                <input type="text" class="input-sm form-control" id="end" name="end" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary" style="margin-top:23px; padding: 4px;" id="refreshdata">Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade hmodal-danger" id="missedentity" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="color-line"></div>
-            <div class="modal-header" style="text-align:center;">
-                <h2>Non-Compliant Entities</h2>
-                <hr/>
-                <h3 id="project-modal-text"></h3>
-                <h4 id="project-module-text"></h4>
-                <p id="project-metric-text"></p>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table id="example1" class="display table table-bordered" width="100%" style="font-size:85%;">
-                        <thead>
-                        <tr>
-                            <th>Entity Id</th>
-                            <th>Entity Name</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+    <div class="modal fade hmodal-danger" id="missedentity" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="color-line"></div>
+                <div class="modal-header" style="text-align:center;">
+                    <h4>Non-Compliant Entities</h4>
+                    <hr />
+                    <div>
+                        <h3 id="project-modal-text"></h3>
+                        <h4 id="project-module-text"></h4>
+                        <p id="project-metric-text"></p>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="display table table-bordered" width="100%" style="font-size:85%;">
+                            <thead>
+                                <tr>
+                                    <th>Entity Id</th>
+                                    <th>Entity Name</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row tour-2">
+    <div class="row tour-2">
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Test Plan</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-info" id="tpds"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Test
+                        </span>
+                        <br />
+                        <small>
+                            Tests with more than one design steps.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp1" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts1"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts2"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts3"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Test Plan</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-info" id="tpdr"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Test
+                        </span>
+                        <br />
+                        <small>
+                            Tests with no duplicate record by name
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp2" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts21"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts22"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts23"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>TEST PLAN</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-info" id="tnlr"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Test
+                        </span>
+                        <br />
+                        <small>
+                            Tests with linked requirements.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp15" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts151"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts152"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts153"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Requirements</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-success" id="rqtc"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Requirement
+                        </span>
+                        <br />
+                        <small>
+                            Requirements with test coverage.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp4" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts41"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts42"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts43"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3" style="display: none;">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Requirements</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-success" id="rqsid"></i>sss
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Requirement
+                        </span>
+                        <br />
+                        <small>
+                            Requirement with source id.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp5" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts51"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts52"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts53"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Requirements</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-success" id="rqcy"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Requirement
+                        </span>
+                        <br />
+                        <small>
+                            Requirement with cycle associated.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp6" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts61"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts62"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts63"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     <div class="col-lg-3">
         <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Test Plan</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-info" id="tpds"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Test
-                    </span>
-                    <br/>
-                    <small>
-                        Tests with design steps.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp1" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts1"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts2"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts3"></h4>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Test Plan</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-info" id="tpdr"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Test
-                    </span>
-                    <br/>
-                    <small>
-                        Test with no duplicate record.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp2" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts21"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts22"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts23"></h4>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
+            <div class="panel-body h-100 list">
                 <div class="stats-title pull-left">
                     <h4>Release Cycles</h4>
                 </div>
                 <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-primary2" id="rcts"></i>
+                    <i class="pe-7s-look fa-4x text-primary2" id="rcts"></i>
                 </div>
                 <div class="m-t-xl">
                     <span class="font-bold no-margins">
                         Cycle
                     </span>
-                    <br/>
+                    <br />
                     <small>
                         Cycle with associated test set.
                     </small>
@@ -229,522 +407,386 @@
         </div>
     </div>
 
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Requirements</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-success" id="rqtc"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Requirement
-                    </span>
-                    <br/>
-                    <small>
-                        Requirements with test coverage.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp4" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Defects</h4>
                     </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts41"></h4>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-danger" id="dfti"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Defect
+                        </span>
+                        <br />
+                        <small>
+                            Defects with linked entities.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp7" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
                     </div>
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts42"></h4>
-                    </div>
+                    <div class="row">
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts43"></h4>
-                    </div>
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts71"></h4>
+                        </div>
 
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts72"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts73"></h4>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Requirements</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-success" id="rqsid"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Requirement
-                    </span>
-                    <br/>
-                    <small>
-                        Requirement with source id.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp5" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Defects</h4>
                     </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts51"></h4>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-danger" id="dfid"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Defect
+                        </span>
+                        <br />
+                        <small>
+                            Defect with SWA Defect Id.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp8" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
                     </div>
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts52"></h4>
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts81"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts82"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts83"></h4>
+                        </div>
+
                     </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts53"></h4>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Requirements</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-success" id="rqcy"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Requirement
-                    </span>
-                    <br/>
-                    <small>
-                        Requirement with cycle associated.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp6" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts61"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts62"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts63"></h4>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Defects</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-danger" id="dfti"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Defect
-                    </span>
-                    <br/>
-                    <small>
-                        Defects linked to test instance.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp7" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Defects</h4>
                     </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts71"></h4>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-danger" id="dfptr"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Defect
+                        </span>
+                        <br />
+                        <small>
+                            PTR linked to test instance.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp9" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
                     </div>
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts72"></h4>
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts91"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts92"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts93"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Test Lab</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-warning" id="tsrc"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Test Set
+                        </span>
+                        <br />
+                        <small>
+                            Test set with linked release cycle
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp10" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
                     </div>
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts73"></h4>
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts101"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts102"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts103"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Test Lab</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-info fa-4x text-warning"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Test Instance
+                        </span>
+                        <br />
+                        <small>
+                            Test Instance with no more than one Not Completed run
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp11" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
                     </div>
 
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts111"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts112"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts113"></h4>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>Test Lab</h4>
+                    </div>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-warning" id="tifd"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Test Instance
+                        </span>
+                        <br />
+                        <small>
+                            Failed/Blocked Test Instance linked to defect
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp12" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts121"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts122"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts123"></h4>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Defects</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-danger" id="dfid"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Defect
-                    </span>
-                    <br/>
-                    <small>
-                        Defect with SWA Defect Id.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp8" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>TEST LAB</h4>
                     </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts81"></h4>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-info fa-4x text-warning" id="rfr"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Runs
+                        </span>
+                        <br />
+                        <small>
+                            Number of non fast runs.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp13" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
                     </div>
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts82"></h4>
-                    </div>
+                    <div class="row">
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts83"></h4>
-                    </div>
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts131"></h4>
+                        </div>
 
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts132"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts133"></h4>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Defects</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-danger" id="dfptr"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Defect
-                    </span>
-                    <br/>
-                    <small>
-                        PTR linked to test instance.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp9" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+        <div class="col-lg-3">
+            <div class="hpanel stats">
+                <div class="panel-body h-100 list">
+                    <div class="stats-title pull-left">
+                        <h4>TEST LAB</h4>
                     </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts91"></h4>
+                    <div class="stats-icon pull-right">
+                        <i class="pe-7s-look fa-4x text-warning" id="tiptr"></i>
+                    </div>
+                    <div class="m-t-xl">
+                        <span class="font-bold no-margins">
+                            Test Instance
+                        </span>
+                        <br />
+                        <small>
+                            Test Instance with PTR having linked defect.
+                        </small>
+                    </div>
+                    <div class="progress m-t-xs full progress-small">
+                        <div id="tp14" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+                        </div>
                     </div>
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts92"></h4>
-                    </div>
+                    <div class="row">
 
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts93"></h4>
-                    </div>
+                        <div class="col-xs-4">
+                            <small class="stats-label">Sample Size</small>
+                            <h4 id="ts141"></h4>
+                        </div>
 
+                        <div class="col-xs-4">
+                            <small class="stats-label">Criteria Size</small>
+                            <h4 id="ts142"></h4>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <small class="stats-label">%</small>
+                            <h4 id="ts143"></h4>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Test Lab</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-warning" id="tsrc"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Test Set
-                    </span>
-                    <br/>
-                    <small>
-                        Test set with linked release cycle
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp10" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
+        <div class="col-lg-3">
+            <div class="hpanel hbgblue">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h3>Excel Reports</h3>
+                        <p class="text-big font-light" id="sqlr">
+
+                        </p>
+                        <small>
+                            Number of SQL based Excel reports.
+                        </small>
                     </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts101"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts102"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts103"></h4>
-                    </div>
-
                 </div>
             </div>
         </div>
+
     </div>
-
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Test Lab</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-warning"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Test Instance
-                    </span>
-                    <br/>
-                    <small>
-                        Test Instance with no more than one Not Completed run
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp11" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts111"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts112"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts113"></h4>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>Test Lab</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-warning" id="tifd"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Test Instance
-                    </span>
-                    <br/>
-                    <small>
-                        Failed/Blocked Test Instance linked to defect
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp12" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts121"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts122"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts123"></h4>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>TEST LAB</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-warning" id="rfr"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Runs
-                    </span>
-                    <br/>
-                    <small>
-                        Number of non fast runs.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp13" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts131"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts132"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts133"></h4>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3">
-        <div class="hpanel stats">
-            <div class="panel-body h-200 list">
-                <div class="stats-title pull-left">
-                    <h4>TEST LAB</h4>
-                </div>
-                <div class="stats-icon pull-right">
-                    <i class="pe-7s-science fa-4x text-warning" id="tiptr"></i>
-                </div>
-                <div class="m-t-xl">
-                    <span class="font-bold no-margins">
-                        Test Instance
-                    </span>
-                    <br/>
-                    <small>
-                        Test Instance with PTR having linked defect.
-                    </small>
-                </div>
-                <div class="progress m-t-xs full progress-small">
-                    <div id="tp14" style="width: 55%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="55" role="progressbar" class="progress-bar">
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Sample Size</small>
-                        <h4 id="ts141"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">Criteria Size</small>
-                        <h4 id="ts142"></h4>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <small class="stats-label">%</small>
-                        <h4 id="ts143"></h4>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3">
-        <div class="hpanel hbgblue">
-            <div class="panel-body">
-                <div class="text-center">
-                    <h3>Excel Reports</h3>
-                    <p class="text-big font-light" id="sqlr">
-
-                    </p>
-                    <small>
-                        Number of SQL based Excel reports.
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
 </div>
 
 @section Styles {
@@ -777,7 +819,7 @@
 
         $(function () {
 
-            $('.pe-7s-science').css('cursor', 'pointer');
+            $('.pe-7s-look').css('cursor', 'pointer');
 
             // Instance the tour
             var tour = new Tour({
@@ -804,7 +846,8 @@
                     {
                         element: ".tour-2",
                         title: "Metric Report",
-                        content: "Each metric is entity selection and the criteria counts are listed here. Clicking on the icon provided the details on the deviated entities",
+                        content:
+                            "Each metric is entity selection and the criteria counts are listed here. Clicking on the icon provided the details on the deviated entities",
                         placement: "top"
 
                     }
@@ -820,6 +863,48 @@
             });
 
         });
+
+
+        $('#tnlr').click(function () {
+            var cproject = $("#project").val();
+            var cstart = $("#start").val();
+            var cend = $("#end").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/MissingData',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '", "metric":"tnlr"}',
+                success: function (data) {
+                    var tlist = "";
+                    var table = $('#example1').DataTable();
+                    table.destroy();
+                    $("#example1 thead tr").remove();
+                    $("#example1 tbody tr").remove();
+                    $("#example1 thead").append('<tr><th>Test Id</th><th>Test Name</th></tr>');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/TestPlanModule-00000000395028973?EntityType=ITest&EntityID=' + data[i].TS_TEST_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].TS_TEST_ID + '</a></td><td>' + data[i].TS_NAME + '</td></tr>');
+                    }
+                    $('#example1').dataTable({
+                        destroy: true,
+                        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        buttons: [
+                            { extend: 'copy', className: 'btn-sm' },
+                            { extend: 'csv', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'pdf', title: 'ExampleFile', className: 'btn-sm' },
+                            { extend: 'print', className: 'btn-sm' }
+                        ]
+                    });
+                    $('#project-modal-text').html("Project: " + cproject);
+                    $('#project-module-text').html("Module: Test Plan");
+                    $('#project-metric-text').html("Description: Tests with no requirements linked.");
+                    $("#missedentity").modal("show");
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        });
+
 
         $('#tpds').click(function () {
             var cproject = $("#project").val();
@@ -838,7 +923,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Test Id</th><th>Test Name</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].TS_TEST_ID + '</td><td>' + data[i].TS_NAME + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/TestPlanModule-00000000395028973?EntityType=ITest&EntityID=' + data[i].TS_TEST_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].TS_TEST_ID + '</a></td><td>' + data[i].TS_NAME + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -853,7 +938,7 @@
                     });
                     $('#project-modal-text').html("Project: " + cproject);
                     $('#project-module-text').html("Module: Test Plan");
-                    $('#project-metric-text').html("Description: Tests with no design steps.");
+                    $('#project-metric-text').html("Description: Tests with one or no design steps.");
                     $("#missedentity").modal("show");
                 },
                 contentType: "application/json",
@@ -876,9 +961,9 @@
                     table.destroy();
                     $("#example1 thead tr").remove();
                     $("#example1 tbody tr").remove();
-                    $("#example1 thead").append('<tr><th>Test Name</th></tr>');
+                    $("#example1 thead").append('<tr><th>Test Id</th><th>Test Name</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].TS_NAME + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/TestPlanModule-00000000395028973?EntityType=ITest&EntityID=' + data[i].TS_TEST_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].TS_TEST_ID + '</a></td><td>' + data[i].TS_NAME + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -893,13 +978,14 @@
                     });
                     $('#project-modal-text').html("Project: " + cproject);
                     $('#project-module-text').html("Module: Test Plan");
-                    $('#project-metric-text').html("Description: Tests with duplicate records.");
+                    $('#project-metric-text').html("Description: Tests with duplicate records by name.");
                     $("#missedentity").modal("show");
                 },
                 contentType: "application/json",
                 dataType: 'json'
             });
         });
+
 
         $('#rcts').click(function () {
             var cproject = $("#project").val();
@@ -958,7 +1044,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Requirement Id</th><th>Req Name</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].RQ_REQ_ID + '</td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/RequirementsModule-0001991264320?EntityType=IRequirement&EntityID=' + data[i].RQ_REQ_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].RQ_REQ_ID + '</a></td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -998,7 +1084,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Requirement Id</th><th>Req Name</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].RQ_REQ_ID + '</td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/RequirementsModule-0001991264320?EntityType=IRequirement&EntityID=' + data[i].RQ_REQ_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].RQ_REQ_ID + '</a></td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -1038,7 +1124,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Requirement Id</th><th>Req Name</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].RQ_REQ_ID + '</td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/RequirementsModule-0001991264320?EntityType=IRequirement&EntityID=' + data[i].RQ_REQ_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].RQ_REQ_ID + '</a></td><td>' + data[i].RQ_REQ_NAME + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -1078,7 +1164,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Defect Id</th><th>Defect Summary</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].BG_BUG_ID + '</td><td>' + data[i].BG_SUMMARY + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/DefectsModule-000000004243046514?EntityType=IBug&EntityID=' + data[i].BG_BUG_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].BG_BUG_ID + '</a></td><td>' + data[i].BG_SUMMARY + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -1093,7 +1179,7 @@
                     });
                     $('#project-modal-text').html("Project: " + cproject);
                     $('#project-module-text').html("Module: Defects");
-                    $('#project-metric-text').html("Description: Defects not Linked to test instance.");
+                    $('#project-metric-text').html("Description: Defects not linked to any entity.");
                     $("#missedentity").modal("show");
                 },
                 contentType: "application/json",
@@ -1118,7 +1204,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Defect Id</th><th>Defect Summary</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].BG_BUG_ID + '</td><td>' + data[i].BG_SUMMARY + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/DefectsModule-000000004243046514?EntityType=IBug&EntityID=' + data[i].BG_BUG_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].BG_BUG_ID + '</a></td><td>' + data[i].BG_SUMMARY + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -1158,7 +1244,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Defect Id</th><th>Defect Summary</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].BG_BUG_ID + '</td><td>' + data[i].BG_SUMMARY + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/DefectsModule-000000004243046514?EntityType=IBug&EntityID=' + data[i].BG_BUG_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].BG_BUG_ID + '</a></td><td>' + data[i].BG_SUMMARY + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -1198,7 +1284,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Cycle Id</th><th>Cycle Name</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].CY_CYCLE_ID + '</td><td>' + data[i].CY_CYCLE + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/TestLabModule-000000003649890581?EntityType=ITestSet&EntityID=' + data[i].CY_CYCLE_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].CY_CYCLE_ID + '</a></td><td>' + data[i].CY_CYCLE + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -1238,7 +1324,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Test Instance Id</th><th>Test Id</th><th>Test Name</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td>' + data[i].TC_TESTCYCL_ID + '</td><td>' + data[i].TC_TEST_ID + '</td><td>' + data[i].TS_NAME + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/TestLabModule-000000003649890581?EntityType=ITestInstance&EntityID=' + data[i].TC_TESTCYCL_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].TC_TESTCYCL_ID + '</a></td><td>' + data[i].TC_TEST_ID + '</td><td>' + data[i].TS_NAME + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -1278,7 +1364,7 @@
                     $("#example1 tbody tr").remove();
                     $("#example1 thead").append('<tr><th>Test Instance Id</th><th>Test Id</th><th>Test Name</th><th>PTR</th></tr>');
                     for (var i = 0; i < data.length; i++) {
-                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.wpquality01:8080/qcbin/TestLabModule-000000003649890581?EntityType=ITestInstance&EntityID=' + data[i].TC_TESTCYCL_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].TC_TESTCYCL_ID + '</a></td><td>' + data[i].TC_TEST_ID + '</td><td>' + data[i].TS_NAME + '</td><td>' + data[i].PTR + '</td></tr>');
+                        $("#example1 tbody").append('<tr><td><a target="_blank" href="td://' + cproject + '.swa_technology.alm.swacorp.com/qcbin/TestLabModule-000000003649890581?EntityType=ITestInstance&EntityID=' + data[i].TC_TESTCYCL_ID + '"><i class="fa fa-external-link" style="color: #3498db;"></i>' + data[i].TC_TESTCYCL_ID + '</a></td><td>' + data[i].TC_TEST_ID + '</td><td>' + data[i].TS_NAME + '</td><td>' + data[i].PTR + '</td></tr>');
                     }
                     $('#example1').dataTable({
                         destroy: true,
@@ -1308,7 +1394,7 @@
             $("#ts3").html("");
 
             $("#tp1").removeClass('progress-bar-success');
-            $("#tp1").removeClass('progress-bar-danger')
+            $("#tp1").removeClass('progress-bar-danger');
             $("#tp1").css('width', 0);
 
             $("#ts21").html("");
@@ -1316,7 +1402,7 @@
             $("#ts23").html("");
 
             $("#tp2").removeClass('progress-bar-success');
-            $("#tp2").removeClass('progress-bar-danger')
+            $("#tp2").removeClass('progress-bar-danger');
             $("#tp2").css('width', 0);
 
             $("#ts31").html("");
@@ -1324,7 +1410,7 @@
             $("#ts33").html("");
 
             $("#tp3").removeClass('progress-bar-success');
-            $("#tp3").removeClass('progress-bar-danger')
+            $("#tp3").removeClass('progress-bar-danger');
             $("#tp3").css('width', 0);
 
             $("#ts41").html("");
@@ -1332,7 +1418,7 @@
             $("#ts43").html("");
 
             $("#tp4").removeClass('progress-bar-success');
-            $("#tp4").removeClass('progress-bar-danger')
+            $("#tp4").removeClass('progress-bar-danger');
             $("#tp4").css('width', 0);
 
 
@@ -1341,7 +1427,7 @@
             $("#ts53").html("");
 
             $("#tp5").removeClass('progress-bar-success');
-            $("#tp5").removeClass('progress-bar-danger')
+            $("#tp5").removeClass('progress-bar-danger');
             $("#tp5").css('width', 0);
 
             $("#ts61").html("");
@@ -1349,7 +1435,7 @@
             $("#ts63").html("");
 
             $("#tp6").removeClass('progress-bar-success');
-            $("#tp6").removeClass('progress-bar-danger')
+            $("#tp6").removeClass('progress-bar-danger');
             $("#tp6").css('width', 0);
 
             $("#ts71").html("");
@@ -1357,7 +1443,7 @@
             $("#ts73").html("");
 
             $("#tp7").removeClass('progress-bar-success');
-            $("#tp7").removeClass('progress-bar-danger')
+            $("#tp7").removeClass('progress-bar-danger');
             $("#tp7").css('width', 0);
 
             $("#ts81").html("");
@@ -1365,7 +1451,7 @@
             $("#ts83").html("");
 
             $("#tp8").removeClass('progress-bar-success');
-            $("#tp8").removeClass('progress-bar-danger')
+            $("#tp8").removeClass('progress-bar-danger');
             $("#tp8").css('width', 0);
 
             $("#ts91").html("");
@@ -1373,7 +1459,7 @@
             $("#ts93").html("");
 
             $("#tp9").removeClass('progress-bar-success');
-            $("#tp9").removeClass('progress-bar-danger')
+            $("#tp9").removeClass('progress-bar-danger');
             $("#tp9").css('width', 0);
 
             $("#ts101").html("");
@@ -1381,7 +1467,7 @@
             $("#ts103").html("");
 
             $("#tp10").removeClass('progress-bar-success');
-            $("#tp10").removeClass('progress-bar-danger')
+            $("#tp10").removeClass('progress-bar-danger');
             $("#tp10").css('width', 0);
 
             $("#ts111").html("");
@@ -1389,7 +1475,7 @@
             $("#ts113").html("");
 
             $("#tp11").removeClass('progress-bar-success');
-            $("#tp11").removeClass('progress-bar-danger')
+            $("#tp11").removeClass('progress-bar-danger');
             $("#tp11").css('width', 0);
 
             $("#ts121").html("");
@@ -1397,7 +1483,7 @@
             $("#ts123").html("");
 
             $("#tp12").removeClass('progress-bar-success');
-            $("#tp12").removeClass('progress-bar-danger')
+            $("#tp12").removeClass('progress-bar-danger');
             $("#tp12").css('width', 0);
 
             $("#ts131").html("");
@@ -1405,8 +1491,24 @@
             $("#ts133").html("");
 
             $("#tp13").removeClass('progress-bar-success');
-            $("#tp13").removeClass('progress-bar-danger')
+            $("#tp13").removeClass('progress-bar-danger');
             $("#tp13").css('width', 0);
+
+            $("#ts141").html("");
+            $("#ts142").html("");
+            $("#ts143").html("");
+
+            $("#tp14").removeClass('progress-bar-success');
+            $("#tp14").removeClass('progress-bar-danger');
+            $("#tp14").css('width', 0);
+
+            $("#ts151").html("");
+            $("#ts152").html("");
+            $("#ts153").html("");
+
+            $("#tp15").removeClass('progress-bar-success');
+            $("#tp15").removeClass('progress-bar-danger');
+            $("#tp15").css('width', 0);
         }
 
         $(document).ready(function () {
@@ -1817,6 +1919,34 @@
                         }
                         var wid = per + '%';
                         $("#tp14").css('width', wid);
+                    }
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/Dashboard/TestReqLinked/',
+                data: '{"project":"' + cproject + '","startdate":"' + cstart + '", "enddate":"' + cend + '"}',
+                success: function (data) {
+                    var per = ((data["CriteriaSize"] * 100) / data["SampleSize"]).toFixed(2);
+
+                    if (!isNaN(per)) {
+
+                        $("#ts151").html(data["SampleSize"]);
+                        $("#ts152").html(data["CriteriaSize"]);
+                        $("#ts153").html(per);
+                        if (per > 95) {
+                            $("#tp15").removeClass('progress-bar-danger');
+                            $("#tp15").addClass('progress-bar-success');
+                        }
+                        else {
+                            $("#tp15").removeClass('progress-bar-success');
+                            $("#tp15").addClass('progress-bar-danger');
+                        }
+                        var wid = per + '%';
+                        $("#tp15").css('width', wid);
                     }
                 },
                 contentType: "application/json",

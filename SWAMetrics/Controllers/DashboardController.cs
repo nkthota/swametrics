@@ -754,6 +754,12 @@ namespace SWAMetrics.Controllers
             return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetTestDuplicate(project));
         }
 
+        [HttpPost]  
+        public string TestReqLinked(string project, string startdate, string enddate)
+        {
+            return JsonConvert.SerializeObject(new AuditMetrics(startdate, enddate).GetTestReqLinked(project));
+        }
+
         [HttpPost]
         public string CyclesAssociated(string project, string startdate, string enddate)  
         {

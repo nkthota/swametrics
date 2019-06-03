@@ -51,7 +51,7 @@ namespace SWAMetrics.Lib
                 $"select count(*) as RecCount from td.Test where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}'");
             var sampleRec = Convert.ToInt32(dts.Rows[0]["RecCount"]);
             var dta = projectDb.SqlQuery(
-                $"select t2.TS_TEST_ID, count(t1.DS_ID) from td.DESSTEPS t1 inner join td.TEST t2 on t1.DS_TEST_ID = t2.TS_TEST_ID where t2.TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' group by t2.TS_TEST_ID having count(t1.DS_ID) > 0");
+                $"select t2.TS_TEST_ID, count(t1.DS_ID) from td.DESSTEPS t1 inner join td.TEST t2 on t1.DS_TEST_ID = t2.TS_TEST_ID where t2.TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' group by t2.TS_TEST_ID having count(t1.DS_ID) > 1");
             var criticalRec = Convert.ToInt32(dta.Rows.Count);
             var recValues = new RecordValues();
             recValues.SampleSize = sampleRec;
@@ -66,11 +66,26 @@ namespace SWAMetrics.Lib
                 $"select count(*) as RecCount from td.Test where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}'");
             var sampleRec = Convert.ToInt32(dts.Rows[0]["RecCount"]);
             var dta = projectDb.SqlQuery(
-                $"select TS_NAME from td.TEST where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' group by TS_NAME having count(ts_name) > 1");
+                $"select TS_NAME from td.TEST where TS_NAME in (select distinct(TS_NAME) from td.TEST where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}') group by TS_NAME having count(ts_name) > 1");
             var criticalRec = Convert.ToInt32(dta.Rows.Count);
             var recValues = new RecordValues();
             recValues.SampleSize = sampleRec;
             recValues.CriteriaSize = sampleRec - criticalRec;
+            return recValues;
+        }
+
+        public RecordValues GetTestReqLinked(string project)
+        {
+            var projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
+            var dts = projectDb.SqlQuery(
+                $"select count(*) as RecCount from td.Test where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}'");
+            var sampleRec = Convert.ToInt32(dts.Rows[0]["RecCount"]);
+            var dta = projectDb.SqlQuery(
+                $"select count(*) as RecCount from td.REQ_COVER where RC_ENTITY_TYPE = 'TEST' and RC_ENTITY_ID in (select TS_TEST_ID from td.TEST where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}')");
+            var criticalRec = Convert.ToInt32(dta.Rows[0]["RecCount"]);
+            var recValues = new RecordValues();
+            recValues.SampleSize = sampleRec;
+            recValues.CriteriaSize = criticalRec;
             return recValues;
         }
 
@@ -93,10 +108,10 @@ namespace SWAMetrics.Lib
         {
             var projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
             var dts = projectDb.SqlQuery(
-                $"select count(*) from td.REQ where RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
+                $"select count(*) from td.REQ where RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
             var sampleRec = Convert.ToInt32(dts.Rows[0][0]);
             var dta = projectDb.SqlQuery(
-                $"select count(distinct(t1.RC_REQ_ID)) from [td].[REQ_COVER] t1 inner join td.REQ t2 on t2.RQ_REQ_ID = t1.RC_REQ_ID where t2.RQ_REQ_ID in (select RQ_REQ_ID from td.REQ where RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}')");
+                $"select count(distinct(t1.RC_REQ_ID)) from [td].[REQ_COVER] t1 inner join td.REQ t2 on t2.RQ_REQ_ID = t1.RC_REQ_ID where t2.RQ_REQ_ID in (select RQ_REQ_ID from td.REQ where RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}')");
             var criticalRec = Convert.ToInt32(dta.Rows[0][0]);
             var recValues = new RecordValues();
             recValues.SampleSize = sampleRec;
@@ -108,10 +123,10 @@ namespace SWAMetrics.Lib
         {
             var projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
             var dts = projectDb.SqlQuery(
-                $"select count(*) from td.REQ where RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
+                $"select count(*) from td.REQ where RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
             var sampleRec = Convert.ToInt32(dts.Rows[0][0]);
             var dta = projectDb.SqlQuery(
-                $"select count(*) from td.REQ where RQ_USER_TEMPLATE_08 IS NOT NULL and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
+                $"select count(*) from td.REQ where RQ_USER_TEMPLATE_08 IS NOT NULL and RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
             var criticalRec = Convert.ToInt32(dta.Rows[0][0]);
             var recValues = new RecordValues();
             recValues.SampleSize = sampleRec;
@@ -123,10 +138,10 @@ namespace SWAMetrics.Lib
         {
             var projectDb = new Database("td", "tdtdtd", "WPSQLQLC01", GetProjectDbName(project));
             var dts = projectDb.SqlQuery(
-                $"select count(*) from td.REQ where RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
+                $"select count(*) from td.REQ where RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
             var sampleRec = Convert.ToInt32(dts.Rows[0][0]);
             var dta = projectDb.SqlQuery(
-                $"select count(*) from td.REQ where RQ_TARGET_RCYC_VARCHAR IS NOT NULL and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
+                $"select count(*) from td.REQ where RQ_TARGET_RCYC_VARCHAR IS NOT NULL and RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
             var criticalRec = Convert.ToInt32(dta.Rows[0][0]);
             var recValues = new RecordValues();
             recValues.SampleSize = sampleRec;
@@ -141,7 +156,7 @@ namespace SWAMetrics.Lib
                 $"select count(*) from td.BUG where BG_DETECTION_DATE BETWEEN '{StartDate}' and '{EndDate}'");
             var sampleRec = Convert.ToInt32(dts.Rows[0][0]);
             var dta = projectDb.SqlQuery(
-                $"select count(distinct(LN_BUG_ID)) from td.LINK where LN_ENTITY_TYPE in ('TESTCYCL') and LN_BUG_ID IN (select BG_BUG_ID from td.BUG where BG_DETECTION_DATE BETWEEN '{StartDate}' and '{EndDate}')");
+                $"select count(distinct(LN_BUG_ID)) from td.LINK where LN_BUG_ID IN (select BG_BUG_ID from td.BUG where BG_DETECTION_DATE BETWEEN '{StartDate}' and '{EndDate}')");
             var criticalRec = Convert.ToInt32(dta.Rows[0][0]);
             var recValues = new RecordValues();
             recValues.SampleSize = sampleRec;
@@ -276,11 +291,15 @@ namespace SWAMetrics.Lib
             {
                 case "tpds":
                     dta = projectDb.SqlQuery(
-                        $"select TS_TEST_ID, TS_NAME from td.TEST where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' and TS_TEST_ID not in ( select t2.TS_TEST_ID from td.DESSTEPS t1 inner join td.TEST t2 on t1.DS_TEST_ID = t2.TS_TEST_ID where t2.TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' group by t2.TS_TEST_ID having count(t1.DS_ID) > 0)");
+                        $"select TS_TEST_ID, TS_NAME from td.TEST where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' and TS_TEST_ID not in ( select t2.TS_TEST_ID from td.DESSTEPS t1 inner join td.TEST t2 on t1.DS_TEST_ID = t2.TS_TEST_ID where t2.TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' group by t2.TS_TEST_ID having count(t1.DS_ID) > 1)");
                     break;
                 case "tpdr":
                     dta = projectDb.SqlQuery(
-                        $"select TS_NAME from td.TEST where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' group by TS_NAME having count(ts_name) > 1");
+                        $"select t1.TS_TEST_ID, t1.TS_NAME from td.TEST t1 inner join (select TS_NAME from td.TEST where TS_NAME in (select distinct(TS_NAME) from td.TEST where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}') group by TS_NAME having count(ts_name) > 1) t2 on t1.TS_NAME = t2.TS_NAME");
+                    break;
+                case "tnlr":
+                    dta = projectDb.SqlQuery(
+                        $"select TS_TEST_ID, TS_NAME from td.TEST where TS_CREATION_DATE BETWEEN '{StartDate}' and '{EndDate}' and TS_TEST_ID NOT IN (select RC_ENTITY_ID from td.REQ_COVER where RC_ENTITY_TYPE = 'TEST')");
                     break;
                 case "rcts":
                     dta = projectDb.SqlQuery(
@@ -288,19 +307,19 @@ namespace SWAMetrics.Lib
                     break;
                 case "rqtc":
                     dta = projectDb.SqlQuery(
-                        $"select RQ_REQ_ID, RQ_REQ_NAME from td.REQ where RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}' and RQ_REQ_ID not in ( select distinct(t1.RC_REQ_ID) from [td].[REQ_COVER] t1 inner join td.REQ t2 on t2.RQ_REQ_ID = t1.RC_REQ_ID where t2.RQ_REQ_ID in (select RQ_REQ_ID from td.REQ where RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'))");
+                        $"select RQ_REQ_ID, RQ_REQ_NAME from td.REQ where RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}' and RQ_REQ_ID not in ( select distinct(t1.RC_REQ_ID) from [td].[REQ_COVER] t1 inner join td.REQ t2 on t2.RQ_REQ_ID = t1.RC_REQ_ID where t2.RQ_REQ_ID in (select RQ_REQ_ID from td.REQ where RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'))");
                     break;
                 case "rqsid":
                     dta = projectDb.SqlQuery(
-                        $"select RQ_REQ_ID, RQ_REQ_NAME from td.REQ where RQ_USER_TEMPLATE_08 IS NULL and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
+                        $"select RQ_REQ_ID, RQ_REQ_NAME from td.REQ where RQ_USER_TEMPLATE_08 IS NULL and RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
                     break;
                 case "rqcy":
                     dta = projectDb.SqlQuery(
-                        $"select RQ_REQ_ID, RQ_REQ_NAME from td.REQ where RQ_TARGET_RCYC_VARCHAR IS NULL and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
+                        $"select RQ_REQ_ID, RQ_REQ_NAME from td.REQ where RQ_TARGET_RCYC_VARCHAR IS NULL and RQ_TYPE_ID IN (select TPR_TYPE_ID from td.REQ_TYPE where TPR_NAME in('Functional','Testing','Undefined','Performance','Story','Feature','Quality','Compliance','Security','System')) and RQ_REQ_DATE BETWEEN '{StartDate}' and '{EndDate}'");
                     break;
                 case "dfti":
                     dta = projectDb.SqlQuery(
-                        $"select BG_BUG_ID, BG_SUMMARY from td.BUG where BG_DETECTION_DATE BETWEEN '{StartDate}' and '{EndDate}' and BG_BUG_ID not in ( select distinct(LN_BUG_ID) from td.LINK where LN_ENTITY_TYPE in ('TESTCYCL') and LN_BUG_ID IN (select BG_BUG_ID from td.BUG where BG_DETECTION_DATE BETWEEN '{StartDate}' and '{EndDate}'))");
+                        $"select BG_BUG_ID, BG_SUMMARY from td.BUG where BG_DETECTION_DATE BETWEEN '{StartDate}' and '{EndDate}' and BG_BUG_ID not in ( select distinct(LN_BUG_ID) from td.LINK where LN_BUG_ID IN (select BG_BUG_ID from td.BUG where BG_DETECTION_DATE BETWEEN '{StartDate}' and '{EndDate}'))");
                     break;
                 case "dfid":
                     dta = projectDb.SqlQuery(
